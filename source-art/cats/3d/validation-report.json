@@ -1,0 +1,53 @@
+{
+  "passed": true,
+  "deformationJoints": 28,
+  "animations": [
+    "HopDown",
+    "HopUp",
+    "Idle",
+    "Walk"
+  ],
+  "feet": {
+    "HindL": {
+      "stanceSamples": 25,
+      "soleMinimumMeters": -1.3864894299331354e-07,
+      "soleMaximumMeters": 1.9166895981470589e-07,
+      "stanceSkinSlipMeters": 3.866675246835816e-06,
+      "jointFlexionDegrees": [
+        60.018716387977946,
+        107.07862414671742
+      ]
+    },
+    "FrontL": {
+      "stanceSamples": 24,
+      "soleMinimumMeters": 1.415889710187912e-05,
+      "soleMaximumMeters": 1.4409655705094337e-05,
+      "stanceSkinSlipMeters": 0.0001278220755713544,
+      "jointFlexionDegrees": [
+        22.63991363617267,
+        76.91704152669637
+      ]
+    },
+    "HindR": {
+      "stanceSamples": 25,
+      "soleMinimumMeters": -2.3455558562091028e-07,
+      "soleMaximumMeters": 1.491699208600039e-07,
+      "stanceSkinSlipMeters": 3.81484764869211e-06,
+      "jointFlexionDegrees": [
+        60.01873004835629,
+        107.07862414671742
+      ]
+    },
+    "FrontR": {
+      "stanceSamples": 25,
+      "soleMinimumMeters": 1.4095567166805267e-05,
+      "soleMaximumMeters": 1.439475454390049e-05,
+      "stanceSkinSlipMeters": 0.00012773643124072698,
+      "jointFlexionDegrees": [
+        22.639896560699743,
+        76.9170346965072
+      ]
+    }
+  },
+  "limitation": "Geometric support checks do not replace front/side/back visual review, scene scale calibration, or art approval."
+}

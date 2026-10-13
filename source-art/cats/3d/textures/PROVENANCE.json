@@ -1,0 +1,8 @@
+{
+  "asset": "fur-ivory-detail.png",
+  "runtime": "public/assets/cats/3d/fur-ivory-detail.webp",
+  "created": "2026-10-12",
+  "method": "OpenAI built-in image_gen tool, new texture generation; runtime file resized to 1024 px and encoded WebP",
+  "usage": "Fine hand-painted fur surface detail only; coat patterns and breed colors remain separately authored; no animal image baked into scene",
+  "prompt": "Use case: stylized-concept. Asset type: seamless square diffuse detail texture for a hand-painted 3D cat's fur in a Japanese illustrated courtyard game. Create a production texture swatch only, NOT a cat or scene. Entire square filled edge-to-edge with naturally flowing fine warm ivory-white cat fur strands, dense soft overlapping tapered short tufts, mainly downward grain with subtle organic waviness. Elegant delicately painted hair detail like high-quality Ghibli-inspired animal illustration. Neutral, nearly uniform, soft diffuse lighting, no directional cast shadow, no vignette. Very narrow tonal range ivory white to pale warm gray; darkest small grooves light gray, no black flecks, spots or coat markings. Tileable left/right/top/bottom edges, no conspicuous repetitive clumps, no cotton/fabric weave. Many small fibers, not huge locks. Texture will be multiplied over independently authored cat coat colors; therefore keep neutral grayscale near white. No text, watermark, border, UI, eyes, nose, paws, body silhouette, floor, background objects. Square 1024x1024."
+}

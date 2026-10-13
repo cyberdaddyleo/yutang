@@ -2,8 +2,18 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {pawCycle,rigControls,rigVertexWeights,applyRigWeights} from '../src/themes/cats/continuous-rig.js';
 import {rearLegFoot,rearLegTargets,rearLegMotion,needsExtraRearLeg,prepareRearLeg} from '../src/themes/cats/hind-leg.js';
-import {selectCatAction,animationSample,drawActionFrame,gaitProgress,partUV,alphaBounds,cleanCellAlpha,atlasSourceRects,shadeCatPaint,poseLayers,torsoLandmark,registerWalkingFrames,GAIT_STRIDE_RATIO,CatAnimationState,CAT_ACTION_CLIPS} from '../src/themes/cats/animation.js';
+import {selectCatAction,animationSample,originalStyleAtlas,drawActionFrame,gaitProgress,partUV,alphaBounds,cleanCellAlpha,atlasSourceRects,shadeCatPaint,poseLayers,torsoLandmark,registerWalkingFrames,GAIT_STRIDE_RATIO,CatAnimationState,CAT_ACTION_CLIPS} from '../src/themes/cats/animation.js';
 const preset={scale:.07},walk={id:'walker',state:'walk',speed:.03,heading:2.2,facing:-1,strideDistance:0};
+test('original designs bypass the reconstructed legs and rear poses while keeping painted eating and sleep',()=>{
+ const atlas={frames:[]};
+ for(const cat of [walk,{...walk,heading:-2.2},{state:'idle'},{state:'jump',traverse:{phase:'jump'}},{state:'interact',task:{tool:'mouse'}}]){
+  assert.equal(originalStyleAtlas(animationSample(cat,preset,0),atlas),null);
+ }
+ for(const state of ['rest','sleep','eat','drink','groom'])assert.equal(originalStyleAtlas(animationSample({state},preset,0),atlas),atlas,state);
+ assert.equal(originalStyleAtlas({action:'eat',index:10,renderAction:'walkToward',renderIndex:0},atlas),null,'a settling transition cannot reintroduce leg deformation');
+ assert.equal(originalStyleAtlas({action:'walkAway',index:4,renderAction:'sleep',renderIndex:9},atlas),null);
+ assert.equal(originalStyleAtlas({action:'sleep',index:9},null),null);
+});
 test('gait articulates one stable directional texture using traveled distance',()=>{
   assert.equal(selectCatAction(walk),'walkToward');assert.equal(selectCatAction({...walk,heading:-2.2}),'walkAway');
   const frames=[];for(let i=0;i<4;i++)frames.push(animationSample({...walk,strideDistance:(i+.1)*preset.scale*GAIT_STRIDE_RATIO/4},preset,100).index);
@@ -107,8 +117,9 @@ test('hind-paw landmarks use actual opaque foot pixels through crop and source m
  for(let y=91;y<99;y++)for(let x=46;x<54;x++)data[(y*width+x)*4+3]=255;
  const foot=rearLegFoot(data,width,height,bounds,mapping);assert.ok(Math.abs(foot.x-.6)<1e-10);assert.ok(foot.y>.97);
  const {near,far}=rearLegTargets(foot);assert.ok(far.paw[0]<near.paw[0]-.15);assert.ok(far.paw[1]<near.paw[1]);
- for(const id of ['domestic-calico','domestic-tuxedo','norwegian-forest','siamese','bengal'])assert.equal(needsExtraRearLeg(id),false,'original two-leg cats must not receive a third leg');assert.equal(needsExtraRearLeg('ragdoll'),true);
- assert.deepEqual(rearLegTargets(foot,'domestic-tuxedo').far.paw,[.90,.78],'the opposite-side raised paw must not be guessed from the near foot');
+ for(const id of ['domestic-calico','norwegian-forest','siamese','bengal'])assert.equal(needsExtraRearLeg(id),false,'original two-leg cats must not receive a third leg');assert.equal(needsExtraRearLeg('ragdoll'),true);
+ assert.ok(needsExtraRearLeg('domestic-tuxedo'),'the selected planted back pose hides the tuxedo far paw');
+ assert.deepEqual(rearLegTargets(foot,'domestic-tuxedo').far.paw,far.paw,'the tuxedo frame-4 raised paw is not present in the selected frame-7 artwork');
 });
 test('rear-leg material cache refreshes mutable night lighting and isolates custom images',()=>{
  const prior=globalThis.document,makeImage=(red=200)=>{const data=new Uint8ClampedArray(40*40*4);for(let y=20;y<40;y++)for(let x=18;x<28;x++){const i=(y*40+x)*4;data[i]=red;data[i+3]=255}return {width:40,height:40,data,getContext:()=>({getImageData:()=>({data:new Uint8ClampedArray(data)})})}};

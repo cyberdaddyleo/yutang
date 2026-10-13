@@ -1,25 +1,19 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {traversalPresentation,supportedTraversalPoint} from '../src/themes/cats/traversal.js';
+import {traversalPresentation,traversalLift,supportedTraversalPoint} from '../src/themes/cats/traversal.js';
 import {quadrupedCycle} from '../src/themes/cats/quadruped.js';
 import {paintedLimbWeight} from '../src/themes/cats/painted-gait.js';
 
-test('steps dissolve only at supported takeoff and landing points, never over the vertical face',()=>{
- const from={x:.55,y:.30},to={x:.56,y:.24},cat={x:.553,y:.277};
- for(const kind of ['surface','climb'])for(const direction of ['up','down']){
-  const traverse={kind,direction,style:kind==='surface'?'jump':'climb',from,to};
-  for(let i=0;i<=20;i++){
-   const progress=i/20;
-   const leave=traversalPresentation({...cat,traverse:{...traverse,phase:'crouch',progress}});
-   const arrive=traversalPresentation({...cat,traverse:{...traverse,phase:'land',progress}});
-   assert.deepEqual(leave.point,from);assert.deepEqual(arrive.point,to);
-   assert.ok(Math.abs(leave.opacity+arrive.opacity-1)<1e-10);
-   const flight=traversalPresentation({...cat,traverse:{...traverse,phase:'jump',progress,jumpProgress:progress}});
-   assert.equal(flight.opacity,0);assert.deepEqual(flight.point,progress>=.5?to:from);
-  }
-  assert.equal(traversalPresentation({...cat,traverse:{...traverse,phase:'crouch',progress:0}}).opacity,1);
-  assert.equal(traversalPresentation({...cat,traverse:{...traverse,phase:'land',progress:1}}).opacity,1);
+test('steps preserve the visible physical trajectory, lift and landing pose',()=>{
+ const from={x:.55,y:.30},to={x:.56,y:.24};
+ for(const kind of ['surface','climb'])for(const direction of ['up','down'])for(const phase of ['crouch','jump','land'])for(let i=0;i<=20;i++){
+  const progress=i/20,cat={x:from.x+(to.x-from.x)*progress,y:from.y+(to.y-from.y)*progress,
+   traverse:{kind,direction,style:kind==='surface'?'jump':'climb',from,to,phase,progress,jumpProgress:progress,jumpHeight:phase==='jump'?Math.sin(progress*Math.PI)*.04:0}};
+  const pose=traversalPresentation(cat);
+  assert.equal(pose.point,cat,'render the actual world point, never snap to an endpoint');assert.equal(pose.opacity,1);assert.equal(pose.transition,true);
+  assert.ok(Math.abs(traversalLift(cat,1600)-cat.traverse.jumpHeight*1600)<1e-10);
  }
+ for(const jumpHeight of [NaN,Infinity,-1,undefined])assert.equal(traversalLift({traverse:{jumpHeight}},1600),0);
 });
 test('flat walking and low ledges never flash; persistence still saves supported endpoints',()=>{
  const cat={x:.52,y:.48};assert.equal(traversalPresentation(cat).opacity,1);

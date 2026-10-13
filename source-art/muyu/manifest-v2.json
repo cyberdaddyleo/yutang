@@ -1,0 +1,330 @@
+{
+  "beads-v2": {
+    "sourceSize": [
+      1364,
+      1153
+    ],
+    "visibleBounds": [
+      203,
+      68,
+      1286,
+      1122
+    ],
+    "runtimeSize": [
+      1024,
+      997
+    ],
+    "file": "beads-v2.webp",
+    "alpha": true,
+    "sourceFile": "beads-v2.png",
+    "anchorsNormalized": {
+      "ovalCenter": [
+        0.5,
+        0.2
+      ],
+      "frontTableEdge": [
+        0.5,
+        0.405
+      ],
+      "tasselAttachment": [
+        0.235,
+        0.4
+      ],
+      "tasselTip": [
+        0.25,
+        0.988
+      ]
+    },
+    "suggestedSceneRect": [
+      270,
+      578,
+      180,
+      175
+    ],
+    "notes": "Keep source aspect. Oval rests on table; tassel hangs below front edge. Whole prop can rotate <=1deg briefly around ovalCenter. Do not stretch individual beads.",
+    "anchorsRuntimePixels": {
+      "ovalCenter": [
+        512.0,
+        199.4
+      ],
+      "frontTableEdge": [
+        512.0,
+        403.79
+      ],
+      "tasselAttachment": [
+        240.64,
+        398.8
+      ],
+      "tasselTip": [
+        256.0,
+        985.04
+      ]
+    }
+  },
+  "candle-v2": {
+    "sourceSize": [
+      1536,
+      1024
+    ],
+    "visibleBounds": [
+      284,
+      200,
+      1248,
+      880
+    ],
+    "runtimeSize": [
+      964,
+      680
+    ],
+    "file": "candle-v2.webp",
+    "alpha": true,
+    "sourceFile": "candle-v2.png",
+    "anchorsNormalized": {
+      "foot": [
+        0.5,
+        0.995
+      ],
+      "wickTip": [
+        0.509,
+        0.125
+      ],
+      "waxTopCenter": [
+        0.51,
+        0.255
+      ]
+    },
+    "suggestedSceneRect": [
+      1126,
+      584,
+      58,
+      41
+    ],
+    "notes": "Unlit plate, black wick. Flame base begins at wickTip. Add subtle shadow under bronze base; glow only when lights enabled.",
+    "anchorsRuntimePixels": {
+      "foot": [
+        482.0,
+        676.6
+      ],
+      "wickTip": [
+        490.68,
+        85.0
+      ],
+      "waxTopCenter": [
+        491.64,
+        173.4
+      ]
+    }
+  },
+  "lantern-table-v2": {
+    "sourceSize": [
+      1024,
+      1536
+    ],
+    "visibleBounds": [
+      82,
+      67,
+      941,
+      1409
+    ],
+    "runtimeSize": [
+      655,
+      1024
+    ],
+    "file": "lantern-table-v2.webp",
+    "alpha": true,
+    "sourceFile": "lantern-table-v2.png",
+    "anchorsNormalized": {
+      "foot": [
+        0.5,
+        0.998
+      ],
+      "lightCenter": [
+        0.506,
+        0.566
+      ]
+    },
+    "paperPolygonsNormalized": [
+      [
+        [
+          0.348,
+          0.375
+        ],
+        [
+          0.661,
+          0.382
+        ],
+        [
+          0.661,
+          0.771
+        ],
+        [
+          0.346,
+          0.763
+        ]
+      ],
+      [
+        [
+          0.142,
+          0.362
+        ],
+        [
+          0.284,
+          0.38
+        ],
+        [
+          0.284,
+          0.763
+        ],
+        [
+          0.149,
+          0.729
+        ]
+      ],
+      [
+        [
+          0.737,
+          0.376
+        ],
+        [
+          0.854,
+          0.358
+        ],
+        [
+          0.853,
+          0.728
+        ],
+        [
+          0.737,
+          0.758
+        ]
+      ]
+    ],
+    "suggestedSceneFoot": [
+      1250,
+      514
+    ],
+    "suggestedSceneWidth": 110,
+    "notes": "Standing lamp, no cord or hanging sway. Match foot to real back step/sideboard after runtime inspection. Light only the three paper polygons, retain original grain/frame.",
+    "anchorsRuntimePixels": {
+      "foot": [
+        327.5,
+        1021.95
+      ],
+      "lightCenter": [
+        331.43,
+        579.58
+      ]
+    },
+    "suggestedContactShadow": {
+      "center": [
+        1250,
+        513
+      ],
+      "radius": [
+        30,
+        4
+      ],
+      "alphaDay": 0.16,
+      "alphaNight": 0.24
+    }
+  },
+  "incense-v2": {
+    "sourceSize": [
+      1024,
+      1536
+    ],
+    "visibleBounds": [
+      387,
+      68,
+      640,
+      1468
+    ],
+    "runtimeSize": [
+      185,
+      1024
+    ],
+    "file": "incense-v2.webp",
+    "alpha": true,
+    "sourceFile": "incense-v2.png",
+    "anchorsNormalized": {
+      "tips": [
+        [
+          0.071,
+          0.0357
+        ],
+        [
+          0.514,
+          0.005
+        ],
+        [
+          0.925,
+          0.0636
+        ]
+      ],
+      "bases": [
+        [
+          0.091,
+          0.996
+        ],
+        [
+          0.478,
+          0.996
+        ],
+        [
+          0.893,
+          0.996
+        ]
+      ]
+    },
+    "suggestedSceneSize": [
+      19,
+      106
+    ],
+    "suggestedSceneInsertion": [
+      409,
+      425
+    ],
+    "notes": "Coordinates are estimated from current room original 1672x941 to1600x900 scene. Insert stems into existing censer aperture, render lower 6-10 percent BEHIND front lip using room foreground crop. Smoke starts exactly at three tip anchors. Do not render orange LED spheres or stretch widths as duration changes.",
+    "anchorsRuntimePixels": {
+      "tips": [
+        [
+          13.13,
+          36.56
+        ],
+        [
+          95.09,
+          5.12
+        ],
+        [
+          171.12,
+          65.13
+        ]
+      ],
+      "bases": [
+        [
+          16.84,
+          1019.9
+        ],
+        [
+          88.43,
+          1019.9
+        ],
+        [
+          165.21,
+          1019.9
+        ]
+      ]
+    },
+    "suggestedFrontRimOcclusion": {
+      "sceneY": [
+        425,
+        433
+      ],
+      "lowerStemOverlapScenePx": [
+        6,
+        10
+      ],
+      "notes": "Narrow foreground aperture lip only; do not obscure or repaint the whole censer."
+    }
+  }
+}

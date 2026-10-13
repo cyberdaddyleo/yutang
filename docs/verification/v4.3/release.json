@@ -1,0 +1,31 @@
+{
+  "version": "4.3.0",
+  "tests": {
+    "fullNodeSuite": 625,
+    "desktopPolicy": 5,
+    "failures": 0,
+    "skipped": 0
+  },
+  "build": {
+    "vite": true,
+    "nativeRebuiltThisPass": true,
+    "package": true,
+    "signing": "ad-hoc",
+    "codeSignStrictDeepVerified": true,
+    "nativeCodeSignVerified": true,
+    "notarized": false
+  },
+  "appAsarSHA256": "ae13a71640c9c24764ac019f324d693ee7b8a366cc2614416bbbc02dfcab457f",
+  "archiveFile": "yutang-v4.3-mac-arm64.zip",
+  "archiveSHA256": "0ef86d2ea0c20b6ab569ba676d9f72e439b299c33cc8fbef6a95596b2b8fa662",
+  "runtimeAssetsMatched": 24,
+  "defaultCats": "painted; 3D is explicit development preview only",
+  "uiSmoke": "Wish and focus panels opened, records panel absent; counts preserved during UI changes. These checks precede the version-only bump.",
+  "notRetested": [
+    "all interactions in every original theme",
+    "real system suspend/resume",
+    "multiple monitors",
+    "long-duration performance",
+    "every focus duration in real time"
+  ]
+}

@@ -1,0 +1,1284 @@
+{
+  "transitions": [
+    {
+      "preset": "ragdoll",
+      "build": 1,
+      "from": "Idle",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "ragdoll",
+      "build": 1,
+      "from": "RestPlush",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "ragdoll",
+      "build": 1,
+      "from": "SleepPlush",
+      "to": "Idle",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "ragdoll",
+      "build": 1,
+      "from": "SleepPlush",
+      "to": "RestPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "ragdoll",
+      "build": 1.25,
+      "from": "Idle",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "ragdoll",
+      "build": 1.25,
+      "from": "RestPlush",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "ragdoll",
+      "build": 1.25,
+      "from": "SleepPlush",
+      "to": "Idle",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "ragdoll",
+      "build": 1.25,
+      "from": "SleepPlush",
+      "to": "RestPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "british-shorthair",
+      "build": 1,
+      "from": "Idle",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "british-shorthair",
+      "build": 1,
+      "from": "RestPlush",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "british-shorthair",
+      "build": 1,
+      "from": "SleepPlush",
+      "to": "Idle",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "british-shorthair",
+      "build": 1,
+      "from": "SleepPlush",
+      "to": "RestPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "british-shorthair",
+      "build": 1.25,
+      "from": "Idle",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "british-shorthair",
+      "build": 1.25,
+      "from": "RestPlush",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "british-shorthair",
+      "build": 1.25,
+      "from": "SleepPlush",
+      "to": "Idle",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "british-shorthair",
+      "build": 1.25,
+      "from": "SleepPlush",
+      "to": "RestPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "chinchilla",
+      "build": 1,
+      "from": "Idle",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "chinchilla",
+      "build": 1,
+      "from": "RestPlush",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "chinchilla",
+      "build": 1,
+      "from": "SleepPlush",
+      "to": "Idle",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "chinchilla",
+      "build": 1,
+      "from": "SleepPlush",
+      "to": "RestPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "chinchilla",
+      "build": 1.25,
+      "from": "Idle",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "chinchilla",
+      "build": 1.25,
+      "from": "RestPlush",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "chinchilla",
+      "build": 1.25,
+      "from": "SleepPlush",
+      "to": "Idle",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "chinchilla",
+      "build": 1.25,
+      "from": "SleepPlush",
+      "to": "RestPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "american-shorthair",
+      "build": 1,
+      "from": "Idle",
+      "to": "Sleep",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.02891921956676812,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "american-shorthair",
+      "build": 1,
+      "from": "Rest",
+      "to": "Sleep",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.016305276890598436,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "american-shorthair",
+      "build": 1,
+      "from": "Sleep",
+      "to": "Idle",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.02891921956676812,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "american-shorthair",
+      "build": 1,
+      "from": "Sleep",
+      "to": "Rest",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.016305276890598436,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "american-shorthair",
+      "build": 1.25,
+      "from": "Idle",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "american-shorthair",
+      "build": 1.25,
+      "from": "RestPlush",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "american-shorthair",
+      "build": 1.25,
+      "from": "SleepPlush",
+      "to": "Idle",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "american-shorthair",
+      "build": 1.25,
+      "from": "SleepPlush",
+      "to": "RestPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "siamese",
+      "build": 1,
+      "from": "Idle",
+      "to": "Sleep",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.02891921956676812,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "siamese",
+      "build": 1,
+      "from": "Rest",
+      "to": "Sleep",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.016305276890598436,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "siamese",
+      "build": 1,
+      "from": "Sleep",
+      "to": "Idle",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.02891921956676812,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "siamese",
+      "build": 1,
+      "from": "Sleep",
+      "to": "Rest",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.016305276890598436,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "siamese",
+      "build": 1.25,
+      "from": "Idle",
+      "to": "Sleep",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.02891921956676812,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "siamese",
+      "build": 1.25,
+      "from": "Rest",
+      "to": "Sleep",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.016305276890598436,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "siamese",
+      "build": 1.25,
+      "from": "Sleep",
+      "to": "Idle",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.02891921956676812,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "siamese",
+      "build": 1.25,
+      "from": "Sleep",
+      "to": "Rest",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.016305276890598436,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "domestic-orange-white",
+      "build": 1,
+      "from": "Idle",
+      "to": "Sleep",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.02891921956676812,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "domestic-orange-white",
+      "build": 1,
+      "from": "Rest",
+      "to": "Sleep",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.016305276890598436,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "domestic-orange-white",
+      "build": 1,
+      "from": "Sleep",
+      "to": "Idle",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.02891921956676812,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "domestic-orange-white",
+      "build": 1,
+      "from": "Sleep",
+      "to": "Rest",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.016305276890598436,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "domestic-orange-white",
+      "build": 1.25,
+      "from": "Idle",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "domestic-orange-white",
+      "build": 1.25,
+      "from": "RestPlush",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "domestic-orange-white",
+      "build": 1.25,
+      "from": "SleepPlush",
+      "to": "Idle",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "domestic-orange-white",
+      "build": 1.25,
+      "from": "SleepPlush",
+      "to": "RestPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "maine-coon",
+      "build": 1,
+      "from": "Idle",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "maine-coon",
+      "build": 1,
+      "from": "RestPlush",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "maine-coon",
+      "build": 1,
+      "from": "SleepPlush",
+      "to": "Idle",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "maine-coon",
+      "build": 1,
+      "from": "SleepPlush",
+      "to": "RestPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "maine-coon",
+      "build": 1.25,
+      "from": "Idle",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "maine-coon",
+      "build": 1.25,
+      "from": "RestPlush",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "maine-coon",
+      "build": 1.25,
+      "from": "SleepPlush",
+      "to": "Idle",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "maine-coon",
+      "build": 1.25,
+      "from": "SleepPlush",
+      "to": "RestPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "domestic-tabby",
+      "build": 1,
+      "from": "Idle",
+      "to": "Sleep",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.02891921956676812,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "domestic-tabby",
+      "build": 1,
+      "from": "Rest",
+      "to": "Sleep",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.016305276890598436,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "domestic-tabby",
+      "build": 1,
+      "from": "Sleep",
+      "to": "Idle",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.02891921956676812,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "domestic-tabby",
+      "build": 1,
+      "from": "Sleep",
+      "to": "Rest",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.016305276890598436,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "domestic-tabby",
+      "build": 1.25,
+      "from": "Idle",
+      "to": "Sleep",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.02891921956676812,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "domestic-tabby",
+      "build": 1.25,
+      "from": "Rest",
+      "to": "Sleep",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.016305276890598436,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "domestic-tabby",
+      "build": 1.25,
+      "from": "Sleep",
+      "to": "Idle",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.02891921956676812,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "domestic-tabby",
+      "build": 1.25,
+      "from": "Sleep",
+      "to": "Rest",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.016305276890598436,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "russian-blue",
+      "build": 1,
+      "from": "Idle",
+      "to": "Sleep",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.02891921956676812,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "russian-blue",
+      "build": 1,
+      "from": "Rest",
+      "to": "Sleep",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.016305276890598436,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "russian-blue",
+      "build": 1,
+      "from": "Sleep",
+      "to": "Idle",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.02891921956676812,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "russian-blue",
+      "build": 1,
+      "from": "Sleep",
+      "to": "Rest",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.016305276890598436,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "russian-blue",
+      "build": 1.25,
+      "from": "Idle",
+      "to": "Sleep",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.02891921956676812,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "russian-blue",
+      "build": 1.25,
+      "from": "Rest",
+      "to": "Sleep",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.016305276890598436,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "russian-blue",
+      "build": 1.25,
+      "from": "Sleep",
+      "to": "Idle",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.02891921956676812,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "russian-blue",
+      "build": 1.25,
+      "from": "Sleep",
+      "to": "Rest",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.016305276890598436,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "norwegian-forest",
+      "build": 1,
+      "from": "Idle",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "norwegian-forest",
+      "build": 1,
+      "from": "RestPlush",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "norwegian-forest",
+      "build": 1,
+      "from": "SleepPlush",
+      "to": "Idle",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "norwegian-forest",
+      "build": 1,
+      "from": "SleepPlush",
+      "to": "RestPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "norwegian-forest",
+      "build": 1.25,
+      "from": "Idle",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "norwegian-forest",
+      "build": 1.25,
+      "from": "RestPlush",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "norwegian-forest",
+      "build": 1.25,
+      "from": "SleepPlush",
+      "to": "Idle",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "norwegian-forest",
+      "build": 1.25,
+      "from": "SleepPlush",
+      "to": "RestPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "domestic-tuxedo",
+      "build": 1,
+      "from": "Idle",
+      "to": "Sleep",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.02891921956676812,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "domestic-tuxedo",
+      "build": 1,
+      "from": "Rest",
+      "to": "Sleep",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.016305276890598436,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "domestic-tuxedo",
+      "build": 1,
+      "from": "Sleep",
+      "to": "Idle",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.02891921956676812,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "domestic-tuxedo",
+      "build": 1,
+      "from": "Sleep",
+      "to": "Rest",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.016305276890598436,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "domestic-tuxedo",
+      "build": 1.25,
+      "from": "Idle",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "domestic-tuxedo",
+      "build": 1.25,
+      "from": "RestPlush",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "domestic-tuxedo",
+      "build": 1.25,
+      "from": "SleepPlush",
+      "to": "Idle",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "domestic-tuxedo",
+      "build": 1.25,
+      "from": "SleepPlush",
+      "to": "RestPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "domestic-calico",
+      "build": 1,
+      "from": "Idle",
+      "to": "Sleep",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.02891921956676812,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "domestic-calico",
+      "build": 1,
+      "from": "Rest",
+      "to": "Sleep",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.016305276890598436,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "domestic-calico",
+      "build": 1,
+      "from": "Sleep",
+      "to": "Idle",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.02891921956676812,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "domestic-calico",
+      "build": 1,
+      "from": "Sleep",
+      "to": "Rest",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.016305276890598436,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "domestic-calico",
+      "build": 1.25,
+      "from": "Idle",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "domestic-calico",
+      "build": 1.25,
+      "from": "RestPlush",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "domestic-calico",
+      "build": 1.25,
+      "from": "SleepPlush",
+      "to": "Idle",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "domestic-calico",
+      "build": 1.25,
+      "from": "SleepPlush",
+      "to": "RestPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "persian",
+      "build": 1,
+      "from": "Idle",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "persian",
+      "build": 1,
+      "from": "RestPlush",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "persian",
+      "build": 1,
+      "from": "SleepPlush",
+      "to": "Idle",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "persian",
+      "build": 1,
+      "from": "SleepPlush",
+      "to": "RestPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "persian",
+      "build": 1.25,
+      "from": "Idle",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "persian",
+      "build": 1.25,
+      "from": "RestPlush",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "persian",
+      "build": 1.25,
+      "from": "SleepPlush",
+      "to": "Idle",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "persian",
+      "build": 1.25,
+      "from": "SleepPlush",
+      "to": "RestPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "exotic-shorthair",
+      "build": 1,
+      "from": "Idle",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "exotic-shorthair",
+      "build": 1,
+      "from": "RestPlush",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "exotic-shorthair",
+      "build": 1,
+      "from": "SleepPlush",
+      "to": "Idle",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "exotic-shorthair",
+      "build": 1,
+      "from": "SleepPlush",
+      "to": "RestPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "exotic-shorthair",
+      "build": 1.25,
+      "from": "Idle",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "exotic-shorthair",
+      "build": 1.25,
+      "from": "RestPlush",
+      "to": "SleepPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "exotic-shorthair",
+      "build": 1.25,
+      "from": "SleepPlush",
+      "to": "Idle",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.029193111502836364,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "exotic-shorthair",
+      "build": 1.25,
+      "from": "SleepPlush",
+      "to": "RestPlush",
+      "minBodyY": -0.0015602141300505908,
+      "maxLift": 0.011511619364057502,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "bengal",
+      "build": 1,
+      "from": "Idle",
+      "to": "Sleep",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.02891921956676812,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "bengal",
+      "build": 1,
+      "from": "Rest",
+      "to": "Sleep",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.016305276890598436,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "bengal",
+      "build": 1,
+      "from": "Sleep",
+      "to": "Idle",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.02891921956676812,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "bengal",
+      "build": 1,
+      "from": "Sleep",
+      "to": "Rest",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.016305276890598436,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "bengal",
+      "build": 1.25,
+      "from": "Idle",
+      "to": "Sleep",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.02891921956676812,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "bengal",
+      "build": 1.25,
+      "from": "Rest",
+      "to": "Sleep",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.016305276890598436,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "bengal",
+      "build": 1.25,
+      "from": "Sleep",
+      "to": "Idle",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.02891921956676812,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "bengal",
+      "build": 1.25,
+      "from": "Sleep",
+      "to": "Rest",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.016305276890598436,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "abyssinian",
+      "build": 1,
+      "from": "Idle",
+      "to": "Sleep",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.02891921956676812,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "abyssinian",
+      "build": 1,
+      "from": "Rest",
+      "to": "Sleep",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.016305276890598436,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "abyssinian",
+      "build": 1,
+      "from": "Sleep",
+      "to": "Idle",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.02891921956676812,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "abyssinian",
+      "build": 1,
+      "from": "Sleep",
+      "to": "Rest",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.016305276890598436,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "abyssinian",
+      "build": 1.25,
+      "from": "Idle",
+      "to": "Sleep",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.02891921956676812,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "abyssinian",
+      "build": 1.25,
+      "from": "Rest",
+      "to": "Sleep",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.016305276890598436,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "abyssinian",
+      "build": 1.25,
+      "from": "Sleep",
+      "to": "Idle",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.02891921956676812,
+      "probeCount": 22650,
+      "activeSamples": 5
+    },
+    {
+      "preset": "abyssinian",
+      "build": 1.25,
+      "from": "Sleep",
+      "to": "Rest",
+      "minBodyY": -0.0015603892022352274,
+      "maxLift": 0.016305276890598436,
+      "probeCount": 22650,
+      "activeSamples": 5
+    }
+  ]
+}

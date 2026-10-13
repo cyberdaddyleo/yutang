@@ -1,14 +1,11 @@
-import {CatMusic} from './music.js';
-import {CAT_WIND_FILE,catWindGain,prepareCatWindSample} from './wind-audio.js';
 // Short locally bundled CC0 recordings; quiet procedural fallback if a file is unavailable.
-// One quiet breeze bed, plus one voice and one replaceable interaction request; no per-cat timers.
+// Sparse bird calls and one short interaction voice; no continuous soundtrack or noise bed.
 export const CAT_CUES=Object.freeze({
  purr:{duration:1.65,gap:3200,peak:.45},meow:{duration:.60,gap:6000,peak:.36},
  food:{duration:.66,gap:1800,peak:.30},tap:{duration:.16,gap:900,peak:.22},
  step:{duration:.12,gap:1300,peak:.10},scratch:{duration:.82,gap:2400,peak:.25},
  yarn:{duration:.52,gap:1700,peak:.24},mouse:{duration:.48,gap:2000,peak:.20},
  feather:{duration:.64,gap:2000,peak:.17},bird:{duration:2.245375,gap:35000,peak:.06},
- cricket:{duration:.86,gap:60000,peak:.032},
 });
 export const CAT_SAMPLE_FILES=Object.freeze(Object.fromEntries(
  ['meow','purr','food','tap','step','scratch','yarn','mouse','feather','bird'].map(id=>[id,`assets/cats/audio/${id}.wav`])
@@ -34,20 +31,21 @@ export function decodeCatSample(bytes,maxSeconds=3){
  return {data,sampleRate:rate};
 }
 async function loadCatSample(id,{signal}={}){
- const file=id==='wind'?CAT_WIND_FILE:CAT_SAMPLE_FILES[id];if(!file)return null;
+ const file=CAT_SAMPLE_FILES[id];if(!file)return null;
  const response=await fetch(`${import.meta.env?.BASE_URL||'/'}${file}`,{signal});
  if(!response.ok)throw new Error('Courtyard sample unavailable');
- return decodeCatSample(await response.arrayBuffer(),id==='wind'?30:3);
+ return decodeCatSample(await response.arrayBuffer());
 }
 const TAU=Math.PI*2;
 const smooth=x=>{const v=Math.max(0,Math.min(1,x));return v*v*(3-2*v)};
 const fade=(t,d,a=.04,r=.09)=>smooth(t/a)*smooth((d-t)/r);
-const ambientKind=id=>id==='bird'||id==='cricket';
+const ambientKind=id=>id==='bird';
 export function catOutputGain(volume){return Number.isFinite(volume)?Math.pow(Math.max(0,Math.min(.6,volume))/.6,.65)*.72:0}
 export function catAmbientDelay(env,first=false,random=.5){
  const night=env?.night||env?.time==='night',r=Math.max(0,Math.min(1,random));
- if(env?.season==='winter')return night?Infinity:first?40+r*25:90+r*70;
- return first?(night?40+r*25:12+r*10):night?85+r*65:35+r*45;
+ if(night)return Infinity;
+ if(env?.season==='winter')return first?40+r*25:90+r*70;
+ return first?12+r*10:35+r*45;
 }
 export function catMeowDelay(random=.5){return 70+80*Math.max(0,Math.min(1,random))}
 
@@ -79,8 +77,6 @@ export function synthesizeCatCue(kind='tap',sampleRate=48000){
     const age=t-start;if(age<0||age>duration)continue;
     const u=age/duration;value+=Math.sin(TAU*(f0*age+sweep*duration/Math.PI*(1-Math.cos(Math.PI*u))))*Math.sin(Math.PI*u)**2;
    }
-  }else if(id==='cricket'){
-   for(const start of [.08,.22,.39]){const age=t-start;if(age<0||age>.09)continue;value+=Math.sin(TAU*2780*age)*Math.sin(Math.PI*age/.09)**2}
   }else if(id==='scratch'||id==='feather'){
    const starts=id==='scratch'?[.02,.26,.5]:[.03,.32],span=id==='scratch'?.20:.24;
    for(const start of starts){const age=t-start;if(age<0||age>span)continue;
@@ -108,22 +104,20 @@ export function synthesizeCatCue(kind='tap',sampleRate=48000){
 export class CatAudio {
  constructor(onStatus=()=>{},random=Math.random,loadSample=loadCatSample){
   this.onStatus=onStatus;this.random=random;this.loadSample=loadSample;this.sampleAbort=null;this.status='off';this.context=null;this.nodes=new Set();this.buffers=new Map();this.last={};this.lastAny=-Infinity;
-  this.music=new CatMusic();this.enabled=false;this.volume=0;this.dead=false;this.pending=0;this.starting=false;this.unlocking=null;this.queued=null;this.queueTimer=0;
+  this.enabled=false;this.volume=0;this.dead=false;this.pending=0;this.starting=false;this.unlocking=null;this.queued=null;this.queueTimer=0;
   this.ambientClock=0;this.ambientKey=null;this.nextAmbient=Infinity;this.nextMeow=Infinity;this.lastAccentAt=-Infinity;this.lastInteractionAt=-Infinity;
-  this.windUnavailable=false;this.wind=null;this.windStarting=false;this.windAbort=null;this.windBuffer=null;this.windClock=0;this.windModulationClock=0;this.windTails=new Set();this.environment={};this.cueSerial=0;this.startingAmbient=false;this.startingKind=null;
+  this.cueSerial=0;this.startingAmbient=false;this.startingKind=null;
  }
  report(status){if(this.status!==status){this.status=status;this.onStatus(status)}}
- restingStatus(){return !this.enabled||!this.volume||this.dead?'off':!this.context||this.context.state==='suspended'?'waiting':this.wind?'playing':'ready'}
- configure(enabled,volume,settings={}){
+ restingStatus(){return !this.enabled||!this.volume||this.dead?'off':!this.context||this.context.state==='suspended'?'waiting':this.nodes.size?'playing':'ready'}
+ configure(enabled,volume){
   if(this.dead)return;
   const wasAudible=this.enabled&&this.volume>0,previousVolume=this.volume;
   this.enabled=!!enabled;this.volume=Number.isFinite(volume)?Math.min(.6,Math.max(0,volume)):0;
-  this.music.configure(this.enabled,this.volume,settings);
   if(!this.enabled||!this.volume){if(wasAudible||this.nodes.size||this.starting||this.queued)this.stop();this.report('off');return}
   if(!wasAudible){this.ambientKey=null;this.ambientClock=0;this.nextAmbient=Infinity;this.report(this.restingStatus())}
   if(this.volume!==previousVolume){
    for(const group of this.nodes)group.gain.gain.setTargetAtTime(catOutputGain(this.volume),this.context.currentTime,.025);
-   this.updateWindGain();
   }
  }
  async unlock(){
@@ -132,7 +126,6 @@ export class CatAudio {
   if(!Audio){this.report('error');return false}
   try{
    const c=this.context??=new Audio();
-   this.music.unlock();
    if(c.state!=='running'){
     this.report('waiting');
     if(!this.unlocking){const job=Promise.resolve(c.resume());this.unlocking=job;job.then(()=>{if(this.unlocking===job)this.unlocking=null},()=>{if(this.unlocking===job)this.unlocking=null})}
@@ -140,7 +133,7 @@ export class CatAudio {
    }
    if(this.dead||this.context!==c||!this.enabled||!this.volume)return false;
    if(c.state==='suspended'){this.report('waiting');return false}
-   this.report(this.nodes.size||this.wind?'playing':'ready');return true;
+   this.report(this.nodes.size?'playing':'ready');return true;
   }catch(error){if(!this.dead&&this.enabled)this.report(error?.name==='NotAllowedError'?'waiting':'error');return false}
  }
  async cue(kind='tap',{priority=false,preview=false,ambient=false}={}){
@@ -174,7 +167,7 @@ export class CatAudio {
    const voice=c.createBufferSource(),gain=c.createGain();voice.buffer=buffer;voice.loop=false;
    gain.gain.setValueAtTime(catOutputGain(this.volume),c.currentTime);voice.connect(gain);gain.connect(c.destination);
    group={voice,gain,kind:id,ambient};this.nodes.add(group);voice.onended=()=>{this.release(group);this.flushSoon()};voice.start(c.currentTime);
-   this.last[id]=performance.now();this.lastAny=this.last[id];if(ambient)this.lastAccentAt=this.ambientClock;this.updateWindGain();this.report('playing');return true;
+   this.last[id]=performance.now();this.lastAny=this.last[id];if(ambient)this.lastAccentAt=this.ambientClock;this.report('playing');return true;
   }catch{if(group)this.release(group);if(generation===this.pending&&serial===this.cueSerial)this.report('error');return false}
   finally{if(generation===this.pending&&serial===this.cueSerial){this.starting=false;this.startingAmbient=false;this.startingKind=null;this.flushSoon()}}
  }
@@ -185,52 +178,12 @@ export class CatAudio {
    if(q&&q.expires>=performance.now()&&!this.dead&&this.enabled&&this.volume)this.cue(q.id,{priority:true,preview:q.preview});
   },Math.max(0,205-(performance.now()-this.lastAny)));
  }
- async ensureWind(){
-  if(this.windUnavailable||this.wind||this.windStarting||this.dead||!this.enabled||!this.volume||!this.context||this.context.state==='suspended')return;
-  const generation=this.pending,c=this.context;this.windStarting=true;
-  try{
-   let buffer=this.windBuffer;
-   if(!buffer){
-    const abort=new AbortController();this.windAbort=abort;const timeout=setTimeout(()=>abort.abort(),2200);let sample;
-    try{sample=await this.loadSample('wind',{signal:abort.signal})}catch{}finally{clearTimeout(timeout);if(this.windAbort===abort)this.windAbort=null}
-    if(this.dead||!this.enabled||!this.volume||generation!==this.pending||this.context!==c)return;
-    try{sample=sample?prepareCatWindSample(sample):null}catch{sample=null}
-    if(!sample){this.windUnavailable=true;return}
-    buffer=c.createBuffer(1,sample.data.length,sample.sampleRate);buffer.copyToChannel(sample.data,0);this.windBuffer=buffer;
-   }
-   if(this.dead||!this.enabled||!this.volume||generation!==this.pending||this.context!==c||this.wind)return;
-   const voice=c.createBufferSource(),gain=c.createGain();voice.buffer=buffer;voice.loop=true;
-   gain.gain.setValueAtTime(0,c.currentTime);voice.connect(gain);gain.connect(c.destination);
-   this.wind={voice,gain};voice.start(c.currentTime);this.updateWindGain(1.2);this.report(this.restingStatus());
-  }catch{/* Wind failure must never block cat interactions. */}
-  finally{if(generation===this.pending)this.windStarting=false}
- }
- updateWindGain(smoothing=.65){
-  if(!this.wind||!this.context)return;
-  const value=catWindGain(catOutputGain(this.volume),this.windClock,{night:this.environment.night||this.environment.time==='night',duck:!!this.nodes.size});
-  this.wind.gain.gain.setTargetAtTime(value,this.context.currentTime,smoothing);
- }
- stopWind(){
-  this.windAbort?.abort();this.windAbort=null;this.windStarting=false;
-  const group=this.wind;this.wind=null;if(!group)return;
-  this.windTails.add(group);
-  const clean=()=>{this.windTails.delete(group);group.voice.onended=null;try{group.voice.disconnect();group.gain.disconnect()}catch{}};
-  group.voice.onended=clean;
-  try{
-   group.gain.gain.cancelScheduledValues?.(this.context.currentTime);
-   group.gain.gain.setTargetAtTime(0,this.context.currentTime,.008);
-   group.voice.stop(this.context.currentTime+.04);
-  }catch{clean()}
- }
  update(dt,environment){
   if(this.dead||!this.enabled||!this.volume||!this.context||this.context.state==='suspended')return;
   const env=environment||{},key=env.season+':'+(env.night||env.time==='night'),elapsed=Math.max(0,Math.min(.1,Number.isFinite(dt)?dt:0));
-  this.music.update(elapsed,this.nodes.size>0);
-  this.environment=env;void this.ensureWind();this.windClock+=elapsed;this.windModulationClock+=elapsed;
-  if(this.windModulationClock>=.25){this.windModulationClock=0;this.updateWindGain()}
   if(key!==this.ambientKey){
    // A slow daylight recording must not become audible after switching to night.
-   // Only ambient bird/insect reads are cancelled; a cat response stays valid.
+   // Only ambient bird reads are cancelled; a cat response stays valid.
    if(this.startingAmbient&&ambientKind(this.startingKind)){
     this.cueSerial++;this.sampleAbort?.abort();this.sampleAbort=null;this.starting=false;this.startingAmbient=false;this.startingKind=null;
     this.report(this.restingStatus());this.flushSoon();
@@ -247,22 +200,21 @@ export class CatAudio {
   if(meowDue)this.nextMeow=this.ambientClock+catMeowDelay(this.random());
   if(birdDue)this.nextAmbient=this.ambientClock+catAmbientDelay(env,false,this.random());
   if(this.queued||this.nodes.size||this.starting||this.ambientClock-this.lastAccentAt<12||performance.now()-this.lastInteractionAt<6000)return;
-  void this.cue(meow?'meow':env.night||env.time==='night'?'cricket':'bird',{ambient:true});
+  void this.cue(meow?'meow':'bird',{ambient:true});
  }
 
  release(group){
   if(!this.nodes.delete(group))return;
   group.voice.onended=null;try{group.gain.disconnect();group.voice.disconnect()}catch{}
-  if(!this.nodes.size){this.updateWindGain();this.report(this.restingStatus())}
+  if(!this.nodes.size){this.report(this.restingStatus())}
  }
  stop(){
-  this.music.stop();this.pending++;this.cueSerial++;this.startingAmbient=false;this.startingKind=null;this.stopWind();this.sampleAbort?.abort();this.sampleAbort=null;this.starting=false;this.queued=null;clearTimeout(this.queueTimer);this.queueTimer=0;this.ambientKey=null;this.nextAmbient=Infinity;this.nextMeow=Infinity;this.lastAccentAt=-Infinity;
+  this.pending++;this.cueSerial++;this.startingAmbient=false;this.startingKind=null;this.sampleAbort?.abort();this.sampleAbort=null;this.starting=false;this.queued=null;clearTimeout(this.queueTimer);this.queueTimer=0;this.ambientKey=null;this.nextAmbient=Infinity;this.nextMeow=Infinity;this.lastAccentAt=-Infinity;
   for(const group of [...this.nodes]){this.release(group);try{group.voice.stop()}catch{}}
   this.report(this.restingStatus());
  }
  destroy(){
-  if(this.dead)return;this.dead=true;this.stop();this.music.destroy();this.buffers.clear();this.unlocking=null;
-  for(const group of this.windTails){group.voice.onended=null;try{group.voice.stop();group.voice.disconnect();group.gain.disconnect()}catch{}}
-  this.windTails.clear();this.windBuffer=null;this.context?.close().catch(()=>{});this.context=null;
+  if(this.dead)return;this.dead=true;this.stop();this.buffers.clear();this.unlocking=null;
+  this.context?.close().catch(()=>{});this.context=null;
  }
 }

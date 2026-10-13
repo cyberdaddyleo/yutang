@@ -13,14 +13,18 @@ export function quadrupedCycle(distanceCycles,index){
  return {phase,cycle,planted:false,travel:SUPPORT_DUTY*(smooth(t)-.5),lift:Math.sin(t*Math.PI)**1.4};
 }
 export class QuadrupedFooting{
- constructor(){this.feet=[];this.origin=null;this.distance=null}
- reset(){this.feet=[];this.origin=null;this.distance=null}
+ constructor(){this.feet=[];this.origin=null;this.distance=null;this.cycles=null}
+ reset(){this.feet=[];this.origin=null;this.distance=null;this.cycles=null}
  sample({origin,direction,distance=0,stride,anchors,hips=null,reach=null,moving=true,airborne=false}){
   const length=Math.hypot(direction.x,direction.y)||1,dir={x:direction.x/length,y:direction.y/length};
   stride=Math.max(.001,stride);
   if(this.origin&&Math.hypot(origin.x-this.origin.x,origin.y-this.origin.y)>stride*2||this.distance!==null&&distance<this.distance-.001)this.reset();
+  // Perspective changes the comfortable stride very slightly as a cat walks
+  // down the courtyard. Integrate travel, rather than dividing all historical
+  // distance by the new stride and jumping to a different footfall phase.
+  this.cycles=this.cycles===null?distance/stride:this.cycles+Math.max(0,distance-this.distance)/stride;
   const result=anchors.map((anchor,index)=>{
-   const phase=quadrupedCycle(distance/stride,index),prior=this.feet[index];
+   const phase=quadrupedCycle(this.cycles,index),prior=this.feet[index];
    let worldX=origin.x+anchor.x+dir.x*phase.travel*stride,worldY=origin.y+anchor.y+dir.y*phase.travel*stride;
    if((phase.planted||!moving)&&prior?.planted&&prior.cycle===phase.cycle&&!airborne){worldX=prior.worldX;worldY=prior.worldY}
    if(!moving&&!prior){worldX=origin.x+anchor.x;worldY=origin.y+anchor.y}

@@ -1,0 +1,195 @@
+{
+  "passed": true,
+  "deformationJoints": 28,
+  "animations": [
+    "Drink",
+    "Eat",
+    "Groom",
+    "HopDown",
+    "HopUp",
+    "Idle",
+    "Pet",
+    "Play",
+    "Rest",
+    "RestPlush",
+    "Scratch",
+    "Sleep",
+    "SleepPlush",
+    "Walk"
+  ],
+  "feet": {
+    "HindL": {
+      "stanceSamples": 25,
+      "soleMinimumMeters": -1.9493711533868918e-07,
+      "soleMaximumMeters": 1.3393855624599382e-07,
+      "stanceSkinSlipMeters": 3.981515258336121e-06,
+      "jointFlexionDegrees": [
+        60.01872321816712,
+        105.83039341551925
+      ]
+    },
+    "FrontL": {
+      "stanceSamples": 24,
+      "soleMinimumMeters": 1.415773294866085e-05,
+      "soleMaximumMeters": 1.4565885066986084e-05,
+      "stanceSkinSlipMeters": 0.00012789817793029679,
+      "jointFlexionDegrees": [
+        22.639905098436206,
+        75.41681096607059
+      ]
+    },
+    "HindR": {
+      "stanceSamples": 25,
+      "soleMinimumMeters": -2.4093185402307427e-07,
+      "soleMaximumMeters": 1.3843808233104937e-07,
+      "stanceSkinSlipMeters": 3.897255721113657e-06,
+      "jointFlexionDegrees": [
+        60.01873004835629,
+        105.8304070758976
+      ]
+    },
+    "FrontR": {
+      "stanceSamples": 25,
+      "soleMinimumMeters": 1.4092540368437767e-05,
+      "soleMaximumMeters": 1.437915489077568e-05,
+      "stanceSkinSlipMeters": 0.00012774063269596625,
+      "jointFlexionDegrees": [
+        22.639905098436206,
+        75.41679047550308
+      ]
+    }
+  },
+  "poses": {
+    "HopUp": {
+      "minBodyZ": -0.00020656967535614967,
+      "maxBodyZ": 0.6888309717178345,
+      "headCenterAtMiddle": [
+        -6.517113071424774e-09,
+        -0.20199090242385864,
+        0.474578320980072
+      ]
+    },
+    "HopDown": {
+      "minBodyZ": -0.0004158720839768648,
+      "maxBodyZ": 0.6926407217979431,
+      "headCenterAtMiddle": [
+        4.3371946034653774e-09,
+        -0.22839105129241943,
+        0.38311320543289185
+      ]
+    },
+    "Idle": {
+      "minBodyZ": -1.6796992952095025e-07,
+      "maxBodyZ": 0.6926641464233398,
+      "headCenterAtMiddle": [
+        -4.086809113346135e-09,
+        -0.20887024700641632,
+        0.43044549226760864
+      ]
+    },
+    "Scratch": {
+      "minBodyZ": 5.9534034591024465e-08,
+      "maxBodyZ": 0.6567668914794922,
+      "headCenterAtMiddle": [
+        1.0319809007341973e-08,
+        -0.24201203882694244,
+        0.33003756403923035
+      ]
+    },
+    "Groom": {
+      "minBodyZ": 3.7860479196183405e-09,
+      "maxBodyZ": 0.5213666558265686,
+      "headCenterAtMiddle": [
+        -0.018649699166417122,
+        -0.23968258500099182,
+        0.2914202809333801
+      ]
+    },
+    "Pet": {
+      "minBodyZ": -1.5000752284777263e-07,
+      "maxBodyZ": 0.6807637810707092,
+      "headCenterAtMiddle": [
+        -6.377476768903989e-09,
+        -0.20976616442203522,
+        0.4196241796016693
+      ]
+    },
+    "SleepPlush": {
+      "minBodyZ": -0.0015602996572852135,
+      "maxBodyZ": 0.27294936776161194,
+      "headCenterAtMiddle": [
+        0.251774400472641,
+        -0.09589796513319016,
+        0.14841359853744507
+      ]
+    },
+    "Sleep": {
+      "minBodyZ": -0.0015604831278324127,
+      "maxBodyZ": 0.24794933199882507,
+      "headCenterAtMiddle": [
+        0.2517743706703186,
+        -0.09589793533086777,
+        0.12341362237930298
+      ]
+    },
+    "Drink": {
+      "minBodyZ": 4.678879150787907e-08,
+      "maxBodyZ": 0.6266013383865356,
+      "headCenterAtMiddle": [
+        6.953638376216986e-08,
+        -0.24877794086933136,
+        0.16403724253177643
+      ]
+    },
+    "Walk": {
+      "minBodyZ": -4.5301356294658035e-05,
+      "maxBodyZ": 0.674464225769043,
+      "headCenterAtMiddle": [
+        -2.832698298149694e-09,
+        -0.21256110072135925,
+        0.40928885340690613
+      ]
+    },
+    "Eat": {
+      "minBodyZ": 4.0154535696501625e-08,
+      "maxBodyZ": 0.6266013383865356,
+      "headCenterAtMiddle": [
+        6.95363766567425e-08,
+        -0.24877792596817017,
+        0.16403722763061523
+      ]
+    },
+    "Play": {
+      "minBodyZ": -4.053814336657524e-06,
+      "maxBodyZ": 0.6510457396507263,
+      "headCenterAtMiddle": [
+        8.13117573272848e-09,
+        -0.2378227859735489,
+        0.33318576216697693
+      ]
+    },
+    "RestPlush": {
+      "minBodyZ": -0.00029259081929922104,
+      "maxBodyZ": 0.38968485593795776,
+      "headCenterAtMiddle": [
+        6.6654868291493585e-09,
+        -0.2307739108800888,
+        0.24672198295593262
+      ]
+    },
+    "Rest": {
+      "minBodyZ": -0.0002927975729107857,
+      "maxBodyZ": 0.357684850692749,
+      "headCenterAtMiddle": [
+        6.6654837205248896e-09,
+        -0.2307738959789276,
+        0.21472197771072388
+      ]
+    }
+  },
+  "limitations": [
+    "Contact test covers canonical straight-line Walk, not curved navigation.",
+    "Actions authored with quadruped IK, not claimed automatic video mocap.",
+    "Visual review at runtime is still required."
+  ]
+}

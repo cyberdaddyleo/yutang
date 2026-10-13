@@ -1,0 +1,123 @@
+{
+  "sourceGeneratedFile": "source-art/muyu/lantern-floor-v4.png",
+  "sourceFile": "lantern-floor-v4.png",
+  "referenceFile": "user-provided visual reference (local-only)",
+  "generation": "Built-in image_gen; generated floor lantern then true alpha cleanup edit",
+  "sourceSize": [
+    1024,
+    1536
+  ],
+  "visibleBoundsAlphaAbove8": [
+    68,
+    91,
+    956,
+    1410
+  ],
+  "cropBounds": [
+    62,
+    85,
+    962,
+    1417
+  ],
+  "cropRatios": [
+    0.060546875,
+    0.055338541666666664,
+    0.939453125,
+    0.9225260416666666
+  ],
+  "runtimeFile": "lantern-floor-v4.webp",
+  "runtimeSize": [
+    692,
+    1024
+  ],
+  "hasAlpha": true,
+  "paperPolygonsNormalized": [
+    [
+      [
+        0.09222,
+        0.22598
+      ],
+      [
+        0.23222,
+        0.25901
+      ],
+      [
+        0.23222,
+        0.72823
+      ],
+      [
+        0.09222,
+        0.68318
+      ]
+    ],
+    [
+      [
+        0.34333,
+        0.26276
+      ],
+      [
+        0.65333,
+        0.26276
+      ],
+      [
+        0.65333,
+        0.73198
+      ],
+      [
+        0.34333,
+        0.73198
+      ]
+    ],
+    [
+      [
+        0.76556,
+        0.25676
+      ],
+      [
+        0.89778,
+        0.22523
+      ],
+      [
+        0.89778,
+        0.68544
+      ],
+      [
+        0.76556,
+        0.72673
+      ]
+    ]
+  ],
+  "paperRangeNormalized": {
+    "x": [
+      0.09222,
+      0.89778
+    ],
+    "y": [
+      0.22598,
+      0.73198
+    ]
+  },
+  "anchorsNormalized": {
+    "lightCenter": [
+      0.49556,
+      0.48949
+    ],
+    "foot": [
+      0.5,
+      0.99399
+    ],
+    "paperBottom": [
+      0.5,
+      0.73198
+    ],
+    "bodyBottom": [
+      0.5,
+      0.93544
+    ]
+  },
+  "notes": "All anchors refer to cropped runtime image. Preserve aspect ratio. Lantern has no cast shadow, ground, emission, or baked light; renderer should light only paper panels. Original generated RGB holds dark amber off-object color but alpha is zero there; use RGBA pipeline. Only alpha-bounds crop and Lanczos downscale/WEBP encode applied, no recoloring.",
+  "prompts": [
+    "Use case: stylized-concept. Asset type: isolated transparent 2.5D game prop, a traditional Chinese floor lantern in the exact rich realistic cinematic material language of the reference. Image 1 is visual STYLE and camera reference; create only a single standalone lantern based on the small lantern on the floor at the lower right of that room. Do not reproduce the room.\nSubject: low, round-bodied hexagonal Chinese palace paper lantern, dark brown wood and aged bronze slim frame, warm ivory unlit translucent rice paper, modest carved lower trim, a quiet shallow cap, four very short feet and a low sturdy base. Overall height 1.55 times width. No tall stem or pole, no hanging hook, no large flared roof or flying eaves. Keep the subtly rounded silhouette of the lower-right reference lamp, with three visible warm ivory paper panels and small bronze accents.\nComposition: the full object alone, comfortably framed, slight elevated 3/4 front view consistent with looking at the floor lantern from the room camera. Photoreal physically plausible wood, aged bronze and fine paper texture, high-quality rendered prop, naturally soft antialiased edges. Soft neutral-warm exterior illumination so all structure is readable. The lantern itself is OFF: no internal fire, no emissive panel, no bloom, no halo, no light cast.\nBackground genuinely transparent alpha. No background scene, no ground plane, no cast shadow, no reflection, no labels, no writing, no watermark, no other props. Reference ambient orange glow is not baked into the asset, because the game will animate light separately.",
+    "Edit target Image 1: Keep this exact floor lantern with identical shape, material and proportions. Remove ALL dark smoky/amber halo and ALL background; every pixel outside the solid lamp, and within the empty spaces between its feet, must have clean zero alpha. Genuine transparent cutout, no ambient shadows or reflection below or around it. Object is fully unlit and retains warm ivory paper, softly illuminated from outside. Do not add any glow or aura. Preserve soft anti-aliased object edges and all existing object geometry and texturing. Only the isolated lamp on true transparency."
+  ]
+}

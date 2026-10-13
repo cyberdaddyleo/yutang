@@ -5,11 +5,12 @@ import {renderCustomizedCat,customizationRenderKey,customizeActionFrame} from '.
 import {normalizeCustomization} from './customization.js';
 import {drawSeasonEffects,drawCourtyardFireflies} from './season-effects.js';
 import {courtyardBackground} from './background.js';
-import {CatAnimationState,loadActionAtlas,getActionSpec,drawActionFrame,poseLayers,drawBlendedPoses} from './animation.js';
+import {CatAnimationState,loadActionAtlas,getActionSpec,originalStyleAtlas,drawActionFrame,poseLayers,drawBlendedPoses} from './animation.js';
 import {courtyardLight,contactShadow,groundedBodyShadow} from './lighting.js';
 import {buildCanopyOcclusion} from './canopy.js';
 import {mergeWindowRects} from './canopy-windows.js';
-import {traversalPresentation} from './traversal.js';
+import {traversalPresentation,traversalLift,bedRimVisible} from './traversal.js';
+import {cat3DPilotEnabled} from './three-cat-mapping.js';
 
 const TAU=Math.PI*2;
 const base=import.meta.env.BASE_URL;
@@ -23,6 +24,8 @@ export class CatRenderer {
   this.animation=new CatAnimationState();this.drawnActions=new Map();this.shadow=document.createElement('canvas');this.shadow.width=192;this.shadow.height=80;const sc=this.shadow.getContext('2d'),g=sc.createRadialGradient(96,96,4,96,96,90);g.addColorStop(0,'#28312275');g.addColorStop(.55,'#28312235');g.addColorStop(1,'#28312200');sc.fillStyle=g;sc.scale(1,80/192);sc.fillRect(0,0,192,192);
   this.particles=Array.from({length:18},(_,i)=>({x:((i*71)%97)/100,y:((i*37)%99)/100,phase:i*2.399,speed:.009+(i%4)*.002}));
   this.nightMix=0;this.lightingAt=0;this.litSprites=new WeakMap();this.propSprites=new Map();this.poseBuffers={};this.catBuffers=new Map();this.catLightBuffer=document.createElement('canvas');
+  this.pilotEnabled=cat3DPilotEnabled(globalThis.location?.search||'');this.pilot=null;this.pilotError=null;
+  if(this.pilotEnabled)import('./three-cat-renderer.js').then(({CatRiggedCourtyard})=>{if(this.dead)return;this.pilot=new CatRiggedCourtyard({baseUrl:`${base}assets/cats/3d/`,onChange:()=>{if(!this.dead)this.onLoad()}});return this.pilot.load()}).catch(error=>{if(!this.dead){this.pilotError=String(error?.message||error);this.onLoad()}});
  }
  resize({width,height,scale}){
   this.cover=coverTransform(width,height);this.scale=scale;for(const c of [this.canvas,this.bgCanvas]){c.width=Math.round(width*scale);c.height=Math.round(height*scale)}
@@ -78,6 +81,14 @@ export class CatRenderer {
   if(this.season!==environment.season||this.timeOfDay!==environment.time){this.season=environment.season;this.timeOfDay=environment.time;this.loadBackground()}
   if(this.previousBackground)this.drawBackground();
   const active=game.cats.filter(cat=>cat.active);const ids=new Set(active.map(cat=>cat.id));this.animation.retain(ids);for(const id of this.skins.keys())if(!ids.has(id))this.skins.delete(id);for(const id of this.drawnActions.keys())if(!ids.has(id))this.drawnActions.delete(id);for(const id of this.catBuffers.keys())if(!ids.has(id))this.catBuffers.delete(id);
+  this.pilot?.select(active);
+  if(this.pilot?.state==='ready'){
+   try{this.pilot.prepareBatch(active.map(cat=>{
+    const preset=getPreset(cat.presetId),p=this.point(cat),bowl=cat.task?.tool==='food'?game.props.find(prop=>prop.id===cat.task.propId):null;
+    const foodPoint=bowl?this.point(foodContact(bowl,cat.task?.feeding?.seat||0)):null;
+    return {cat,preset,worldScale:this.cover.drawWidth,pixelRatio:this.scale,time,light:courtyardLight(cat,this.nightMix,this.canopy?.sampleAt(cat.x,cat.y)||0),reducedMotion:options.reducedMotion||options.quality==='low',foodTarget:foodPoint?{x:foodPoint.x-p.x,y:foodPoint.y-p.y}:null};
+   }));}catch(error){this.pilotError=String(error?.message||error);this.pilot.dispose();this.pilot=null;}
+  }
   drawSeasonEffects(c,t,environment,options,time,'ground');
   const sorted=[...game.props.map(p=>({kind:'prop',y:p.y,item:p})),...active.map(cat=>({kind:'cat',y:cat.y,item:cat}))].sort((a,b)=>a.y-b.y||(a.kind==='prop'?-1:1));
   for(const entry of sorted)if(entry.kind==='prop')this.drawProp(entry.item,time,options);else this.drawCat(entry.item,time,options,entry.item.task?.tool==='food'?game.props.find(p=>p.id===entry.item.task.propId):null);
@@ -118,14 +129,14 @@ export class CatRenderer {
   if(fade<1)draw(this.previousCanopy,1-fade);draw(this.canopy,fade);
  }
  drawCat(cat,time,options,foodBowl=null){
+  if(this.drawPilotCat(cat,time,options,foodBowl))return;
   const skin=this.skin(cat);if(!skin)return;
   const presentation=traversalPresentation(cat),c=this.ctx,p=this.point(presentation.point),preset=getPreset(cat.presetId),perspective=.88+cat.y*.18;
   c.save();
   c.globalAlpha*=presentation.opacity;
   const w=this.cover.drawWidth*(preset.scale||.068)*perspective*normalizeCustomization(cat.customization).size,h=w*skin.height/skin.width;
-  const quiet=options.reducedMotion||options.quality==='low',sample=this.animation.sample(cat,preset,time,quiet),entry=this.skins.get(cat.id),atlas=entry?.atlas;
-  const resting=['sleep','rest'].includes(sample.action),jump=0;
-  if(presentation.transition){sample.motionStage=null;sample.traverse=null;sample.stageProgress=0;sample.renderAction='idle';sample.action='idle';sample.locomotion={...sample.locomotion,moving:false};}
+  const quiet=options.reducedMotion||options.quality==='low',sample=this.animation.sample(cat,preset,time,quiet),entry=this.skins.get(cat.id),atlas=originalStyleAtlas(sample,entry?.atlas);
+  const resting=['sleep','rest'].includes(sample.action),jump=traversalLift(cat,this.cover.drawWidth);
   const light=courtyardLight(cat,this.nightMix,this.canopy?.sampleAt(cat.x,cat.y)||0);
   // The broad shadow is deliberately faint: the four small planted-paw shadows
   // below are what bind a walking cat to the paving. Height affects only real jumps.
@@ -162,21 +173,48 @@ export class CatRenderer {
   c.drawImage(lit,0,0,side,side,p.x-ox/ratio,p.y-jump-oy/ratio,side/ratio,side/ratio);
   const flip=sample.renderFlip??sample.flip;this.bounds.set(cat.id,{x:p.x+(flip===1?measured.left:-measured.left-measured.width),y:p.y+measured.top-jump,w:measured.width,h:measured.height});
   if(presentation.opacity<.12)this.bounds.delete(cat.id);
-  this.drawnActions.set(cat.id,{action:sample.action,frame:atlas?(sample.renderIndex??sample.index):-1,flip,jump,poseSource:atlas&&sample.index>=0?'atlas':'standing',status:entry?.actionStatus,surfaceId:cat.surfaceId||'ground',light,feeding,contacts:contacts.map(foot=>({...foot,worldX:cat.x+flip*foot.x/this.cover.drawWidth,worldY:cat.y+foot.y/this.cover.drawHeight}))});
+  this.drawnActions.set(cat.id,{action:sample.action,frame:atlas?(sample.renderIndex??sample.index):-1,flip,jump,poseSource:atlas&&sample.index>=0?'atlas':'original-portrait',status:entry?.actionStatus,surfaceId:cat.surfaceId||'ground',light,feeding,contacts:contacts.map(foot=>({...foot,worldX:cat.x+flip*foot.x/this.cover.drawWidth,worldY:cat.y+foot.y/this.cover.drawHeight}))});
   this.drawForeground({...cat,...presentation.point},jump);
   const label=({heart:'♡',relaxed:'～',curious:'· · ·'}[cat.expression]||cat.expression)||(cat.state==='sleep'?'z Z':cat.state==='rest'?'…':null);
   if(label){c.save();c.font=`${Math.max(12,Math.min(18,w*.16))}px -apple-system,sans-serif`;c.textAlign='center';c.fillStyle='#365340';c.shadowColor='#fbffe5';c.shadowBlur=5;c.fillText(label,p.x+w*.3,p.y+measured.top-8-jump);c.restore()}
   if(this.hoverId===cat.id){c.save();c.font='12px -apple-system,sans-serif';c.textAlign='center';const tw=c.measureText(cat.name).width;c.fillStyle='#234b3edc';c.beginPath();c.roundRect(p.x-tw/2-10,p.y+7,tw+20,24,12);c.fill();c.fillStyle='#f3f7dd';c.fillText(cat.name,p.x,p.y+23);c.restore()}
   c.restore();
  }
+ drawPilotCat(cat,time,options={},foodBowl=null){
+  if(!this.pilot?.supports(cat))return false;
+  const preset=getPreset(cat.presetId);if(!preset)return false;
+  const p=this.point(cat),c=this.ctx,jump=traversalLift(cat,this.cover.drawWidth),light=courtyardLight(cat,this.nightMix,this.canopy?.sampleAt(cat.x,cat.y)||0);
+  const foodPoint=foodBowl?foodContact(foodBowl,cat.task?.feeding?.seat||0):null,foodScreen=foodPoint?this.point(foodPoint):null;
+  let rendered;try{rendered=this.pilot.render({cat,preset,worldScale:this.cover.drawWidth,pixelRatio:this.scale,time,light,reducedMotion:options.reducedMotion||options.quality==='low',foodTarget:foodScreen?{x:foodScreen.x-p.x,y:foodScreen.y-p.y}:null})}catch(error){this.pilotError=String(error?.message||error);this.pilot.dispose();this.pilot=null;return false}
+  if(!rendered)return false;
+  const {canvas,sourceRect,cssSize,anchor,bounds,contacts,offset={x:0,y:0},mouth}=rendered,w=this.cover.drawWidth*(preset.scale||.068)*(.88+cat.y*.18)*normalizeCustomization(cat.customization).size;
+  const visual={x:p.x+offset.x,y:p.y+offset.y};
+  const feeding=foodBowl&&mouth&&rendered.clip==='Eat'?{mouth:{x:cat.x+(mouth.x+offset.x)/this.cover.drawWidth,y:cat.y+(mouth.y+offset.y)/this.cover.drawHeight},foodPoint,bowl:{x:foodBowl.x,y:foodBowl.y,foodScale:foodBowl.foodScale||1,capacity:foodBowl.capacity}}:null;
+  if(feeding)feeding.inside=mouthInsideFood(feeding.mouth,foodBowl);
+  c.save();
+  if(contacts.length){
+   const body=groundedBodyShadow(contacts,w,light,jump);c.globalAlpha=body.opacity;c.drawImage(this.shadow,visual.x+body.x-body.rx,visual.y+body.y-body.ry,body.rx*2,body.ry*2);
+   for(const foot of contacts){const shadow=contactShadow(foot,w,light,jump);c.globalAlpha=shadow.opacity;c.drawImage(this.shadow,visual.x+shadow.x-shadow.rx,visual.y+shadow.y-shadow.ry,shadow.rx*2,shadow.ry*2)}
+  }else{c.globalAlpha=light.castOpacity/(1+jump/Math.max(1,w)*2);c.drawImage(this.shadow,visual.x-w*.33,visual.y-w*.035,w*.66,w*.14)}
+  c.globalAlpha=1;
+  if(sourceRect)c.drawImage(canvas,sourceRect.x,sourceRect.y,sourceRect.width,sourceRect.height,visual.x-anchor.x,visual.y-jump-anchor.y,cssSize,cssSize);
+  else c.drawImage(canvas,visual.x-anchor.x,visual.y-jump-anchor.y,cssSize,cssSize);
+  this.bounds.set(cat.id,{x:visual.x+bounds.x,y:visual.y-jump+bounds.y,w:bounds.w,h:bounds.h});
+  this.drawnActions.set(cat.id,{action:rendered.clip,clip:rendered.clip,requestedAction:rendered.requestedAction,fallback:rendered.fallback,missingClip:rendered.missingClip,jumpReady:rendered.jumpReady,frame:-1,flip:1,jump,poseSource:'gltf-skeleton',status:'ready',surfaceId:cat.surfaceId||'ground',boneCount:rendered.boneCount,phase:rendered.phase,yaw:rendered.yaw,light,feeding,contacts:contacts.map(foot=>({...foot,worldX:cat.x+(foot.x+offset.x)/this.cover.drawWidth,worldY:cat.y+(foot.y+offset.y)/this.cover.drawHeight}))});
+  this.drawForeground(cat,jump);
+  const label=({heart:'♡',relaxed:'～',curious:'· · ·'}[cat.expression]||cat.expression)||(cat.state==='sleep'?'z Z':cat.state==='rest'?'…':null);
+  if(label){c.font=`${Math.max(12,Math.min(18,w*.16))}px -apple-system,sans-serif`;c.textAlign='center';c.fillStyle='#365340';c.shadowColor='#fbffe5';c.shadowBlur=5;c.fillText(label,p.x+w*.3,p.y+bounds.y-8-jump);c.shadowBlur=0}
+  if(this.hoverId===cat.id){c.font='12px -apple-system,sans-serif';c.textAlign='center';const tw=c.measureText(cat.name).width;c.fillStyle='#234b3edc';c.beginPath();c.roundRect(p.x-tw/2-10,p.y+7,tw+20,24,12);c.fill();c.fillStyle='#f3f7dd';c.fillText(cat.name,p.x,p.y+23)}
+  c.restore();return true;
+ }
  drawForeground(cat,jump=0){
   if(!this.background)return;const c=this.ctx,t=this.cover;let points=null;
   // These are pixels from the same painting, never a separately scaled rock.
   // Only a cat behind a lip is masked; cats standing in front remain unobscured.
-  if(cat.surfaceId==='bed')points=[[.675,.116],[.684,.139],[.706,.156],[.739,.163],[.773,.152],[.795,.133],[.808,.111],[.804,.139],[.784,.165],[.747,.180],[.705,.169],[.679,.145]];
+  if(bedRimVisible(cat))points=[[.675,.116],[.684,.139],[.706,.156],[.739,.163],[.773,.152],[.795,.133],[.808,.111],[.804,.139],[.784,.165],[.747,.180],[.705,.169],[.679,.145]];
   else if(cat.surfaceId==='lower-platform'&&jump<1)points=[[.903,.564],[.927,.585],[.957,.592],[.984,.569],[.985,.583],[.960,.610],[.929,.600],[.904,.579]];
-  else if(['step','porch'].includes(cat.surfaceId)&&cat.y<.23)points=[[.526,.224],[.542,.245],[.570,.259],[.605,.260],[.637,.245],[.650,.224],[.652,.239],[.629,.272],[.589,.280],[.549,.268],[.525,.244]];
-  if(!points)return;c.save();c.filter='none';c.beginPath();points.forEach(([x,y],i)=>{const p=this.point({x,y});i?c.lineTo(p.x,p.y):c.moveTo(p.x,p.y)});c.closePath();c.clip();c.drawImage(this.background,t.offsetX,t.offsetY,t.drawWidth,t.drawHeight);c.restore();
+  else if(jump<1&&['step','porch'].includes(cat.surfaceId)&&cat.y<.23)points=[[.526,.224],[.542,.245],[.570,.259],[.605,.260],[.637,.245],[.650,.224],[.652,.239],[.629,.272],[.589,.280],[.549,.268],[.525,.244]];
+  if(!points)return;c.save();c.filter='none';const bounds=this.bounds.get(cat.id);if(bounds){c.beginPath();c.rect(bounds.x-2,bounds.y-2,bounds.w+4,bounds.h+4);c.clip()}c.beginPath();points.forEach(([x,y],i)=>{const p=this.point({x,y});i?c.lineTo(p.x,p.y):c.moveTo(p.x,p.y)});c.closePath();c.clip();c.drawImage(this.background,t.offsetX,t.offsetY,t.drawWidth,t.drawHeight);c.restore();
  }
  drawProp(prop,time,options){
   let sprite=this.propSprites.get(prop.tool);if(!sprite){sprite=document.createElement('canvas');sprite.width=384;sprite.height=384;this.drawPropArtwork(prop,0,{reducedMotion:true},sprite.getContext('2d'),{x:192,y:264},3.2);this.propSprites.set(prop.tool,sprite)}
@@ -204,6 +242,6 @@ export class CatRenderer {
  }
  drawFireflies(env,options,time){drawCourtyardFireflies(this.ctx,this.cover,env,options,time)}
  drawDebug(){const c=this.ctx;c.save();c.fillStyle='#85e1b322';c.strokeStyle='#277654bb';for(const poly of WALKABLE_POLYGONS){c.beginPath();poly.forEach((p,i)=>{const q=this.point(p);i?c.lineTo(q.x,q.y):c.moveTo(q.x,q.y)});c.closePath();c.fill();c.stroke()}c.fillStyle='#ec76694a';for(const o of OBSTACLES){const p=this.point(o);c.beginPath();c.ellipse(p.x,p.y,o.rx*this.cover.drawWidth,o.ry*this.cover.drawHeight,0,0,TAU);c.fill()}c.restore()}
- stats(){return{width:this.canvas.width,height:this.canvas.height,backgroundWidth:this.background?.naturalWidth||this.background?.width||0,backgroundHeight:this.background?.naturalHeight||this.background?.height||0,backgroundSize:[this.background?.naturalWidth||this.background?.width||0,this.background?.naturalHeight||this.background?.height||0],skinCount:this.skins.size,actionAtlases:[...this.skins.values()].filter(e=>e.atlas).length,missingActionCats:[...this.skins.entries()].filter(([,e])=>e.actionStatus==='missing'||e.actionStatus==='failed').map(([id])=>id),actions:[...this.drawnActions.entries()].map(([id,a])=>({id,...a}))}}
- destroy(){this.dead=true;this.backgroundGeneration++;this.skins.clear();this.bounds.clear();this.animation.clear();this.drawnActions.clear();this.propSprites.clear();this.catBuffers.clear();this.catLightBuffer.width=this.catLightBuffer.height=0;this.litSprites=new WeakMap();this.poseBuffers={};this.background=null;this.previousBackground=null;this.canopy=null;this.previousCanopy=null;this.backgroundMatte=null;this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);this.bg.clearRect(0,0,this.bgCanvas.width,this.bgCanvas.height)}
+ stats(){return{pilot3D:this.pilotEnabled?(this.pilot?.stats()||{enabled:true,status:this.pilotError?'failed':'loading',error:this.pilotError}):{enabled:false},width:this.canvas.width,height:this.canvas.height,backgroundWidth:this.background?.naturalWidth||this.background?.width||0,backgroundHeight:this.background?.naturalHeight||this.background?.height||0,backgroundSize:[this.background?.naturalWidth||this.background?.width||0,this.background?.naturalHeight||this.background?.height||0],skinCount:this.skins.size,actionAtlases:[...this.skins.values()].filter(e=>e.atlas).length,missingActionCats:[...this.skins.entries()].filter(([,e])=>e.actionStatus==='missing'||e.actionStatus==='failed').map(([id])=>id),actions:[...this.drawnActions.entries()].map(([id,a])=>({id,...a}))}}
+ destroy(){this.dead=true;this.pilot?.dispose();this.pilot=null;this.backgroundGeneration++;this.skins.clear();this.bounds.clear();this.animation.clear();this.drawnActions.clear();this.propSprites.clear();this.catBuffers.clear();this.catLightBuffer.width=this.catLightBuffer.height=0;this.litSprites=new WeakMap();this.poseBuffers={};this.background=null;this.previousBackground=null;this.canopy=null;this.previousCanopy=null;this.backgroundMatte=null;this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);this.bg.clearRect(0,0,this.bgCanvas.width,this.bgCanvas.height)}
 }

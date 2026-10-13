@@ -2,11 +2,11 @@
 // pixels: reuse this same cat's planted-paw artwork as an independent far limb.
 // The torso stays opaque and occludes the upper joint; no whole-cat frame swap.
 import {pawCycle} from './continuous-rig.js';
-// These source poses already expose the far paw. Their source-rectangle
+// These source poses (the planted frame 7 used by withPortraitGait) already
+// expose the far paw. Their source-rectangle
 // landmarks were checked at enlarged scale; never add a third hind leg.
 const originalFarLegs={
  'domestic-calico':{hip:[.59,.60],knee:[.55,.75],paw:[.54,.82]},
- 'domestic-tuxedo':{hip:[.81,.56],knee:[.875,.70],paw:[.90,.78]},
  'norwegian-forest':{hip:[.50,.62],knee:[.455,.73],paw:[.445,.79]},
  siamese:{hip:[.565,.64],knee:[.52,.77],paw:[.507,.85]},
  bengal:{hip:[.60,.59],knee:[.56,.73],paw:[.54,.80]},

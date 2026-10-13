@@ -49,20 +49,26 @@ export function flightHeight(progress,arc,direction='up',style='jump'){
 // Mostly constant horizontal speed with a little ease: no hovering at either end.
 export function flightTravel(progress,style='jump'){const p=Math.max(0,Math.min(1,Number(progress)||0));return style==='stride'?p:p*.82+p*p*(3-2*p)*.18;}
 
-// A single painted standing pose cannot convincingly articulate a vertical
-// jump. Render a brief departure/arrival dissolve at supported endpoints while
-// the existing traversal continues to own routing, reservations and persistence.
-// Flat paths and low lips never fade.
+// The navigation simulation owns the takeoff, trajectory and landing. Render
+// that same point throughout the jump; hiding its middle used to look like a
+// teleport and also discarded the articulated crouch/landing poses.
 export function traversalPresentation(cat){
  const move=cat.traverse;
- if(!move||move.style==='stride')return {point:cat,opacity:1,transition:false};
- const p=Math.max(0,Math.min(1,Number(move.progress)||0)),ease=p*p*(3-2*p);
- if(move.phase==='crouch')return {point:move.from,opacity:1-ease,transition:true};
- if(move.phase==='land')return {point:move.to,opacity:ease,transition:true};
- return {point:move.jumpProgress>=.5?move.to:move.from,opacity:0,transition:true};
+ return {point:cat,opacity:1,transition:!!move&&move.style!=='stride'};
 }
 
-export function prepareSurfacePath(from,path){
+// A transient "air" surface must not remove the painted basket rim. Use the
+// actual ground projection while crossing it; the jump lift clears the edge.
+export function bedRimVisible(cat){
+ return cat.surfaceId==='bed'||cat.traverse?.feature==='bed'&&surfaceAt(cat)?.id==='bed';
+}
+
+export function traversalLift(cat,worldScale){
+ const height=Number(cat.traverse?.jumpHeight);
+ return Number.isFinite(height)&&height>0?Math.min(.09,height)*worldScale:0;
+}
+
+export function prepareSurfacePath(from,path,{bodyWidth=.065}={}){
  if(prepared.has(path))return path;
  const result=[];let a=from;
  for(const b of path){
@@ -76,7 +82,14 @@ export function prepareSurfacePath(from,path){
    const rise=(heights.get(after.id)||0)-(heights.get(before.id)||0),style=traversalStyle(rise);
    result.push({...takeoff,jump:{to:landing,fromSurface:before.id,toSurface:after.id,direction:rise>=0?'up':'down',style,arc:traversalArc(rise,style)}});
   }
-  result.push({x:b.x,y:b.y});a=b;
+  if(b.bedJump){
+   const down=b.bedJump.direction==='down',width=Math.max(.04,Math.min(.11,bodyWidth));
+   // The lip is taller than the difference between its two support planes.
+   // Take off outside the weave, land inside it, then walk to the sleep slot.
+   result.push({x:b.x,y:b.y,jump:{to:{...b.bedJump.to},fromSurface:surfaceAt(b)?.id,toSurface:surfaceAt(b.bedJump.to)?.id,
+    direction:down?'down':'up',style:'jump',feature:'bed',arc:width*(down?.16:.23),duration:down?.38:.44}});
+   a=b.bedJump.to;
+  }else{result.push({x:b.x,y:b.y});a=b;}
  }
  prepared.add(result);return result;
 }

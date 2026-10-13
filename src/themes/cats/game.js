@@ -4,7 +4,7 @@ import {prepareSurfacePath,sameSurface,supportedTraversalPoint,TRAVERSAL_TIMING,
 import { getPreset, MAX_ACTIVE_CATS } from './catalog.js';
 import { DEFAULT_CAT_ENVIRONMENT, normalizeEnvironment } from './environment.js';
 import { validateDesign, normalizeCats, MAX_CAT_COLLECTION } from './storage.js';
-import { distance, isWalkable, nearestWalkable, findPath, segmentWalkable, randomWalkable, FACILITIES, ASPECT, surfaceAt, SLEEP_SLOTS, SLEEP_SLOT_MAP } from './geometry.js';
+import { distance, isWalkable, nearestWalkable, findPath, segmentWalkable, randomWalkable, FACILITIES, BED_PORTALS, ASPECT, surfaceAt, SLEEP_SLOTS, SLEEP_SLOT_MAP } from './geometry.js';
 export const CAT_TOOLS=Object.freeze(['food','yarn','scratch','wand','mouse','pet']);
 export const CAT_LIMITS=Object.freeze({active:MAX_ACTIVE_CATS,collection:MAX_CAT_COLLECTION,temporaryProps:6,scratchBoards:3,visible:MAX_ACTIVE_CATS});
 const durations={food:7,yarn:7,scratch:5,wand:18,mouse:7,pet:3.5};
@@ -59,7 +59,14 @@ export class CatGame{
   _cancelInteraction(cat,keepProp=false){if(cat.traverse?.kind==='surface')this._queueGroundAction(cat,{type:'wake'});else this._release(cat,keepProp);}
   _removeProp(prop){for(const c of this.cats)if(c.task?.propId===prop.id)this._cancelInteraction(c,true);this.props=this.props.filter(p=>p!==prop);}
   _avoidCats(cat){return this.cats.filter(c=>c!==cat&&c.active).flatMap(c=>[{x:c.x,y:c.y,radius:spacing(cat,c,.046)},...(c.traverse?[{...c.traverse.to,radius:spacing(cat,c,.046)}]:[])]);}
-  _route(cat,point){const path=findPath(cat,point);if(!path)return false;cat.advanceAnchor=null;cat.target=copyPoint(point);cat.path=path;cat.state=cat.task?'approach':'walk';cat.stateTime=0;cat.progressAt=this.time;cat.bestDistance=Infinity;return true;}
+  _findPath(from,to,options={}){
+    // A sleeping neighbour can block one mat lane without blocking the whole
+    // courtyard destination. Reserve a clear takeoff/landing and let the usual
+    // per-step collision checks handle the rest of the route.
+    const crossing=(surfaceAt(from)?.id==='bed')!==(surfaceAt(to)?.id==='bed');
+    return findPath(from,to,{...options,bedAvoid:crossing?this._avoidCats(options.actor||from):[]});
+  }
+  _route(cat,point){const path=this._findPath(cat,point);if(!path)return false;cat.advanceAnchor=null;cat.target=copyPoint(point);cat.path=path;cat.state=cat.task?'approach':'walk';cat.stateTime=0;cat.progressAt=this.time;cat.bestDistance=Infinity;return true;}
   _near(point,index=0,size=1){
     if(index===0&&isWalkable(point))return copyPoint(point);
     for(let i=0;i<20;i++){const a=(i*.618+index*.5)*Math.PI*2,r=(.029+Math.floor(i/6)*.008)*Math.max(1,size);const p={x:point.x+Math.cos(a)*r,y:point.y+Math.sin(a)*r/ASPECT};if(isWalkable(p))return p;}return null;
@@ -96,7 +103,7 @@ export class CatGame{
       for(let ring=0;ring<7;ring++)for(let k=0;k<12;k++){
         const r=.045+ring*.022,a=phase+k*Math.PI/6,p={x:cat.x+Math.cos(a)*r,y:cat.y+Math.sin(a)*r/ASPECT};
         if(!isWalkable(p)||(flat&&!sameSurface(p,cat))||surfaceAt(p)?.id==='lower-platform'||!clear(p)||!this._clearSpot(p,cat))continue;
-        const path=findPath(cat,p,{avoid:this._avoidCats(cat)});if(path&&(!flat||path.every(node=>sameSurface(node,cat))))return {p,path};
+        const path=this._findPath(cat,p,{avoid:this._avoidCats(cat)});if(path&&(!flat||path.every(node=>sameSurface(node,cat))))return {p,path};
       }
     }
     return null;
@@ -109,7 +116,7 @@ export class CatGame{
     for(let ring=0;ring<4;ring++)for(let k=0;k<10;k++){
       const r=.012+ring*.01,a=phase+k*Math.PI/5,p={x:cat.x+Math.cos(a)*r,y:cat.y+Math.sin(a)*r/ASPECT};
       if(!isWalkable(p)||surfaceAt(p)?.id!==surface||!this._clearSpot(p,cat,COLLISION_SPACE)||prepareSurfacePath(cat,[p]).some(n=>n.jump))continue;
-      const rest=findPath(p,cat.target,{avoid:this._avoidCats(cat)})||findPath(p,cat.target);if(!rest)continue;
+      const rest=this._findPath(p,cat.target,{avoid:this._avoidCats(cat),actor:cat})||this._findPath(p,cat.target,{actor:cat});if(!rest)continue;
       cat.path=prepareSurfacePath(cat,[copyPoint(p),...rest]);cat.bestDistance=Infinity;cat.progressAt=this.time;cat.advanceAnchor=null;cat.speed=0;return true;
     }
     return false;
@@ -117,11 +124,11 @@ export class CatGame{
   _slotAvailable(slot,cat){return this.cats.every(c=>c===cat||!c.active||(c.restIntent?.slotId!==slot.id&&c.sleepSlotId!==slot.id&&distance(c.target||c,slot)>=spacing(cat,c,COLLISION_SPACE)));}
   _chooseSleepSlot(cat,preferred='bed'){
     const preference=slot=>slot.surfaceId===preferred?0:slot.surfaceId==='bed'?1:slot.surfaceId==='safe-rock'?2:3;
-    return SLEEP_SLOTS.filter(slot=>!slot.traversal).sort((a,b)=>preference(a)-preference(b)||distance(cat,a)-distance(cat,b)).find(slot=>this._slotAvailable(slot,cat)&&findPath(cat,slot));
+    return SLEEP_SLOTS.filter(slot=>!slot.traversal).sort((a,b)=>preference(a)-preference(b)||distance(cat,a)-distance(cat,b)).find(slot=>this._slotAvailable(slot,cat)&&this._findPath(cat,slot));
   }
   _assignRest(cat,slot,{persistent=true,kind='sleep'}={}){
     if(slot.traversal==='jump')return this._assignClimb(cat);
-    const path=findPath(cat,slot);if(!path)return false;this._release(cat);cat.active=true;cat.sleepSlotId=slot.id;
+    const path=this._findPath(cat,slot);if(!path)return false;this._release(cat);cat.active=true;cat.sleepSlotId=slot.id;
     cat.restIntent=persistent?{slotId:slot.id,surfaceId:slot.surfaceId,target:copyPoint(slot),kind}:null;
     cat.restZone=slot.surfaceId==='bed'?'bed':slot.surfaceId==='safe-rock'?'rock':'garden';
     cat.target=copyPoint(slot);cat.path=path;cat.afterWalk=kind;cat.state='approach';cat.wait=0;
@@ -146,7 +153,7 @@ export class CatGame{
     if(this._platformReserved(cat))return false;
     const slot=SLEEP_SLOT_MAP['climbing-lower'];
     if(this._onPlatform(cat)&&!cat.traverse){this._release(cat);cat.restIntent={slotId:slot.id,surfaceId:slot.surfaceId,target:copyPoint(slot),kind:'rest'};cat.sleepSlotId=slot.id;cat.state='rest';cat.wait=Infinity;return true;}
-    const target=FACILITIES.climbing.approach,path=findPath(cat,target);if(!path)return false;
+    const target=FACILITIES.climbing.approach,path=this._findPath(cat,target);if(!path)return false;
     this._release(cat);cat.restIntent={slotId:slot.id,surfaceId:slot.surfaceId,target:copyPoint(slot),kind:'rest'};cat.sleepSlotId=slot.id;cat.climbAction='up';cat.path=path;cat.target=copyPoint(target);cat.state='approach';cat.wait=0;
     if(distance(cat,target)<.003){cat.path=[];this._arrive(cat);}return true;
   }
@@ -163,9 +170,9 @@ export class CatGame{
     // Only locomotion pauses while the paws leave one physical surface.
     // A low lip is walked over without stopping; hops and jumps gather first.
     const from=copyPoint(cat),to=copyPoint(jump.to),style=TRAVERSAL_TIMING[jump.style]?jump.style:'jump',stride=style==='stride';
-    const duration=stride?clamp(distance(from,to)/Math.max(.014,cat.speed||.02),.16,.5):TRAVERSAL_TIMING[style].jump;
+    const duration=stride?clamp(distance(from,to)/Math.max(.014,cat.speed||.02),.16,.5):jump.duration||TRAVERSAL_TIMING[style].jump;
     if(!stride)cat.speed=0;cat.state=stride?'walk':'crouch';cat.stateTime=0;
-    cat.traverse={kind:'surface',style,direction:jump.direction,from,to,fromSurface:jump.fromSurface,toSurface:jump.toSurface,arc:jump.arc??.012,duration,phase:stride?'jump':'crouch',elapsed:0,progress:0,jumpProgress:0,jumpHeight:0,fromElevation:surfaceAt(from)?.elevation||0,toElevation:surfaceAt(to)?.elevation||0};
+    cat.traverse={kind:'surface',style,feature:jump.feature,direction:jump.direction,from,to,fromSurface:jump.fromSurface,toSurface:jump.toSurface,arc:jump.arc??.012,duration,phase:stride?'jump':'crouch',elapsed:0,progress:0,jumpProgress:0,jumpHeight:0,fromElevation:surfaceAt(from)?.elevation||0,toElevation:surfaceAt(to)?.elevation||0};
     const heading=Math.atan2((to.y-from.y)*ASPECT,to.x-from.x);cat.motionHeading=heading;
     if(!stride){cat.heading=heading;cat.facing=to.x>=from.x?1:-1;}
   }
@@ -197,7 +204,7 @@ export class CatGame{
       return;
     }
     if(move.phase==='jump'){
-      const duration=stride?move.duration||timing.jump:timing.jump,progress=Math.min(1,move.elapsed/duration);move.progress=progress;move.jumpProgress=progress;
+      const duration=move.duration||timing.jump,progress=Math.min(1,move.elapsed/duration);move.progress=progress;move.jumpProgress=progress;
       move.jumpHeight=flightHeight(progress,move.arc??.045,move.direction,style);
       const t=flightTravel(progress,style);cat.x=move.from.x+(move.to.x-move.from.x)*t;cat.y=move.from.y+(move.to.y-move.from.y)*t;cat.state=stride?'walk':'jump';
       if(progress>=1){
@@ -231,7 +238,7 @@ export class CatGame{
             if(!dock||!isWalkable(dock)||!sameSurface(dock,anchor)||!segmentWalkable(dock,anchor))break;
             if(assignments.some(a=>distance(a.target,dock)<spacing(a.cat,cat,COLLISION_SPACE)))break;
             if(this.cats.some(other=>other.active&&!ordered.includes(other)&&distance(other.target||other,dock)<spacing(cat,other,COLLISION_SPACE)))break;
-            const path=findPath(cat,dock);if(!path)break;
+            const path=this._findPath(cat,dock);if(!path)break;
             const target=copyPoint(dock);assignments.push({cat,target,path,feeding:{seat:dock.seat,facing:dock.facing}});score+=distance(cat,target);
           }
           if(assignments.length===ordered.length&&(!best||score<best.score))best={assignments,bowl,score};
@@ -258,7 +265,7 @@ export class CatGame{
     const assignments=foodPlan?.assignments||[];
     for(const cat of tool==='food'?[]:candidates){
       const target=tool==='pet'?(selected?copyPoint(cat):this._near(anchor,assignments.length+1,catSize(cat))):this._toyDock(cat,anchor,tool);
-      if(!target)continue;const path=findPath(cat,target);if(!path)continue;
+      if(!target)continue;const path=this._findPath(cat,target);if(!path)continue;
       assignments.push({cat,target,path});if(assignments.length>=(tool==='food'&&!selected?2:1))break;
     }
     if(!assignments.length)return {ok:false,message:'猫咪暂时走不到这里，换一块石板试试。'};
@@ -289,7 +296,7 @@ export class CatGame{
     const preset=getPreset(cat.presetId),body=(preset?.scale||.068)*(.88+point.y*.18)*catSize(cat),scratch=tool==='scratch',reach=body*(scratch?.5:.44)+(scratch?.009:0);
     for(const side of cat.x<=point.x?[-1,1]:[1,-1])for(const dy of [0,.014,-.014,.028]){
       const p={x:point.x+side*reach,y:point.y+dy};
-      if(isWalkable(p)&&sameSurface(p,point)&&segmentWalkable(p,point,0)&&this._clearSpot(p,cat,COLLISION_SPACE)&&findPath(cat,p))return p;
+      if(isWalkable(p)&&sameSurface(p,point)&&segmentWalkable(p,point,0)&&this._clearSpot(p,cat,COLLISION_SPACE)&&this._findPath(cat,p))return p;
     }
     return this._near(point,1,catSize(cat));
   }
@@ -326,13 +333,13 @@ export class CatGame{
     if(!cat.restIntent&&cat.task?.tool!=='food'&&cat.target&&this.time>(cat.nextRepath||0)&&distance(cat,cat.target)<.085&&this.cats.some(c=>c!==cat&&c.active&&!c.path.length&&distance(c,cat.target)<COLLISION_SPACE)){
       cat.nextRepath=this.time+1.5;const prop=cat.task&&this.props.find(p=>p.id===cat.task.propId);const target=this._freePoint(prop||cat.target,cat,{nearOnly:true,maxRadius:prop?.075:.15,avoidZone:cat.afterWalk==='sleep'&&cat.restZone==='garden'?FACILITIES.bed.approach:null});if(target)this._route(cat,target);
     }
-    cat.path=prepareSurfacePath(cat,cat.path);
+    cat.path=prepareSurfacePath(cat,cat.path,{bodyWidth:(getPreset(cat.presetId)?.scale||.068)*catSize(cat)});
     let next=cat.path[0];if(!next){this._arrive(cat);return;}
     // A neighbour's nudge can leave the body where its old leg would cut a
     // step face; plan again from where the paws actually are.
     if(cat.target&&distance(cat,next)>.003&&!segmentWalkable(cat,next)&&this.time>(cat.nextLegCheck||0)){
-      cat.nextLegCheck=this.time+.5;const path=findPath(cat,cat.target,{avoid:this._avoidCats(cat)})||findPath(cat,cat.target);
-      if(path){cat.path=prepareSurfacePath(cat,path);cat.bestDistance=Infinity;cat.progressAt=this.time;next=cat.path[0];}
+      cat.nextLegCheck=this.time+.5;const path=this._findPath(cat,cat.target,{avoid:this._avoidCats(cat)})||this._findPath(cat,cat.target);
+      if(path){cat.path=prepareSurfacePath(cat,path,{bodyWidth:(getPreset(cat.presetId)?.scale||.068)*catSize(cat)});cat.bestDistance=Infinity;cat.progressAt=this.time;next=cat.path[0];}
     }
     const distanceToNext=distance(cat,next);
     // Re-routing resets the per-node progress clock; this one only advances
@@ -348,14 +355,14 @@ export class CatGame{
       cat.nextDynamicRoute=this.time+2;this._clearWay(cat,next);
       if(!cat.task&&!cat.restIntent&&!cat.manualRoute&&this.time-(cat.lastAdvanceAt??this.time)>6){this._release(cat);cat.wait=1;return;}
       if(this.time-(cat.lastAdvanceAt??this.time)>4&&this._unstick(cat))return;
-      const path=findPath(cat,cat.target,{avoid:this._avoidCats(cat)})||(!segmentWalkable(cat,next)&&findPath(cat,cat.target));
-      if(path){cat.path=prepareSurfacePath(cat,path);cat.bestDistance=Infinity;cat.progressAt=this.time;next=cat.path[0];}
+      const path=this._findPath(cat,cat.target,{avoid:this._avoidCats(cat)})||(!segmentWalkable(cat,next)&&this._findPath(cat,cat.target));
+      if(path){cat.path=prepareSurfacePath(cat,path,{bodyWidth:(getPreset(cat.presetId)?.scale||.068)*catSize(cat)});cat.bestDistance=Infinity;cat.progressAt=this.time;next=cat.path[0];}
       // A cat that was only wandering gives up, even while waiting at a step edge.
       else if(!cat.task&&!cat.restIntent&&!cat.manualRoute){this._release(cat);cat.wait=1;return;}
     }
     // Round a navigation corner only when the shortcut stays on a legal
     // surface. The body follows a curve; it never teleports to a path node.
-    if(cat.path.length>1&&!next.jump&&sameSurface(cat,cat.path[1])&&distance(cat,next)<Math.max(.006,cat.speed*.30)&&segmentWalkable(cat,cat.path[1])){cat.path.shift();next=cat.path[0];cat.bestDistance=Infinity;cat.progressAt=this.time;}
+    if(cat.path.length>1&&!next.jump&&sameSurface(cat,cat.path[1])&&distance(cat,next)<Math.max(.006,cat.speed*.30)&&segmentWalkable(cat,cat.path[1])&&this.cats.every(other=>other===cat||!other.active||segmentDistance(other,cat,cat.path[1])>=Math.min(distance(cat,other),spacing(cat,other,COLLISION_SPACE)))){cat.path.shift();next=cat.path[0];cat.bestDistance=Infinity;cat.progressAt=this.time;}
     const d=distance(cat,next),remaining=distance(cat,next.jump&&next.jump.style!=='stride'?next:cat.target||next),preset=getPreset(cat.presetId);
     const base=typeof preset?.speed==='number'?clamp(preset.speed,.012,.045):.024,personality=personalityOf(cat);
     const direction=Math.atan2((next.y-cat.y)*ASPECT,next.x-cat.x),oldHeading=Number.isFinite(cat.motionHeading)?cat.motionHeading:cat.heading;
@@ -368,17 +375,18 @@ export class CatGame{
     const step=Math.min(d,cat.speed*dt);
     if(d>.00001){
       let proposed={x:cat.x+Math.cos(cat.motionHeading)*step,y:cat.y+Math.sin(cat.motionHeading)*step/ASPECT};
+      const narrow=['porch','bed-entry','bed'].includes(cat.surfaceId);
       // Tight steps and narrow porch entries may not have room for an arc.
       // Continue the legal segment as the facing catches up; never cut flowers.
-      if((!sameSurface(cat,proposed)||!isWalkable(proposed)||!segmentWalkable(cat,proposed))&&Math.abs(turn)<.65)proposed={x:cat.x+(next.x-cat.x)*step/d,y:cat.y+(next.y-cat.y)*step/d};
+      if(!sameSurface(cat,proposed)||!isWalkable(proposed)||!segmentWalkable(cat,proposed)||(narrow&&!segmentWalkable(proposed,next)))proposed=Math.abs(turn)<.65?{x:cat.x+(next.x-cat.x)*step/d,y:cat.y+(next.y-cat.y)*step/d}:copyPoint(cat);
       // Steering around neighbours is for open walking. In the last few
       // millimetres to a waypoint it only balances against the approach.
-      if(d>.006)for(const other of this.cats)if(other!==cat&&other.active){const near=distance(proposed,other),personal=spacing(cat,other);if(near>.0001&&near<personal+.005){
+      if(d>(next.jump?.feature==='bed'?.018:.006))for(const other of this.cats)if(other!==cat&&other.active){const near=distance(proposed,other),personal=spacing(cat,other);if(near>.0001&&near<personal+.005){
         const push=Math.max(0,personal-near)*Math.min(.16,dt*3),vx=(next.x-cat.x)/d,vy=(next.y-cat.y)*ASPECT/d;
         const toward=vx*(other.x-cat.x)+vy*(other.y-cat.y)*ASPECT;
         const cross=vx*(other.y-cat.y)*ASPECT-vy*(other.x-cat.x),side=cross>=0?-1:1,lateral=toward>0?step*.65:0;
         const shifted={x:proposed.x+(proposed.x-other.x)/near*push-vy*lateral*side,y:proposed.y+(proposed.y-other.y)/near*push+vx*lateral*side/ASPECT};
-        if(sameSurface(cat,shifted)&&isWalkable(shifted)&&segmentWalkable(cat,shifted))proposed=shifted;
+        if(sameSurface(cat,shifted)&&isWalkable(shifted)&&segmentWalkable(cat,shifted)&&(!narrow||segmentWalkable(shifted,next)))proposed=shifted;
       }}
       const overlaps=this.cats.some(other=>other!==cat&&other.active&&[other,...(other.traverse?[other.traverse.to]:[])].some(occupied=>distance(proposed,occupied)<spacing(cat,other,COLLISION_SPACE)&&distance(proposed,occupied)<distance(cat,occupied)));
       if(!overlaps&&sameSurface(cat,proposed)&&isWalkable(proposed)&&segmentWalkable(cat,proposed)){cat.x=proposed.x;cat.y=proposed.y;}
@@ -430,11 +438,11 @@ export class CatGame{
   }
   _resumeIntent(cat){
     const goal=cat.detourGoal;cat.resumeAt=null;cat.detourGoal=null;
-    if(cat.task){const path=findPath(cat,cat.task.target);if(path){cat.target=copyPoint(cat.task.target);cat.path=path;cat.task.phase='approach';cat.state='approach';cat.stateTime=0;cat.progressAt=this.time;cat.bestDistance=Infinity;cat.advanceAnchor=null;}else this._release(cat);return;}
+    if(cat.task){const path=this._findPath(cat,cat.task.target);if(path){cat.target=copyPoint(cat.task.target);cat.path=path;cat.task.phase='approach';cat.state='approach';cat.stateTime=0;cat.progressAt=this.time;cat.bestDistance=Infinity;cat.advanceAnchor=null;}else this._release(cat);return;}
     if(cat.restIntent){this._resumeRest(cat);return;}
     if(cat.sleepSlotId&&cat.afterWalk){const slot=SLEEP_SLOT_MAP[cat.sleepSlotId];if(slot&&this._slotAvailable(slot,cat)&&this._assignRest(cat,slot,{persistent:false,kind:cat.afterWalk}))return;}
     // A walk to a facility (or the cat-tree run-up) carries on where it left off.
-    const path=goal&&findPath(cat,goal.target);
+    const path=goal&&this._findPath(cat,goal.target);
     if(path){cat.target=copyPoint(goal.target);cat.path=path;cat.afterWalk=goal.afterWalk;cat.manualRoute=goal.manualRoute;cat.state=goal.manualRoute||cat.climbAction?'approach':'walk';cat.stateTime=0;cat.progressAt=this.time;cat.bestDistance=Infinity;cat.advanceAnchor=null;return;}
     this._release(cat);cat.state='observe';cat.wait=1;
   }
@@ -487,6 +495,32 @@ export class CatGame{
     let p={x:.58,y:.60},best=-1;for(let i=0;i<28;i++){const candidate=randomWalkable(this.random);if(surfaceAt(candidate)?.id!=='ground')continue;const score=Math.min(...this.cats.filter(c=>c.active).map(c=>distance(c,candidate)),1);if(score>best){best=score;p=candidate;}}
     const cat=this._runtimeCat({...design,id:this._id('friend'),active,...p});this.cats.push(cat);return {ok:true,cat,message:active?`${cat.name}来庭院玩了。`:'庭院已满，这只猫先在收藏里休息。'};
   }
+  _resizeRestPath(cat,slot){
+    const avoid=this._avoidCats(cat),normal=this._findPath(cat,slot,{avoid});if(normal)return {path:normal,escaping:false};
+    if(surfaceAt(cat)?.id!=='bed'||slot.surfaceId==='bed'||!avoid.some(o=>distance(cat,o)<o.radius))return null;
+    // A just-enlarged pair can already overlap its new clearance radius.
+    // Permit only an outward exit which never worsens that existing overlap;
+    // the landing and the remaining walk still require the full new clearance.
+    for(const portal of BED_PORTALS){
+      const approach=findPath(cat,portal.inside),departure=findPath(portal.outside,slot,{avoid});
+      if(!approach||!departure||!segmentWalkable(portal.inside,portal.outside))continue;
+      const points=[cat,...approach,portal.outside];
+      if(avoid.some(o=>distance(portal.outside,o)<o.radius||points.some((p,i)=>i&&segmentDistance(o,points[i-1],p)<Math.min(o.radius,distance(cat,o))-1e-6)))continue;
+      return {path:[...approach.slice(0,-1),{...portal.inside,bedJump:{to:{...portal.outside},direction:'down'}},...departure],escaping:true};
+    }
+    return null;
+  }
+  _reflowRest(cat,slot,{path,escaping}){
+    const persistent=!!cat.restIntent,kind=cat.restIntent?.kind||cat.afterWalk||cat.state;
+    this._release(cat);cat.active=true;cat.sleepSlotId=slot.id;
+    cat.restIntent=persistent?{slotId:slot.id,surfaceId:slot.surfaceId,target:copyPoint(slot),kind}:null;
+    cat.restZone=slot.surfaceId==='bed'?'bed':slot.surfaceId==='safe-rock'?'rock':'garden';
+    cat.target=copyPoint(slot);cat.path=path;cat.afterWalk=kind;cat.state='approach';cat.wait=0;
+    // An initially crowded cat must retreat along the verified straight leg.
+    // A steering arc could move outward then back into the enlarged neighbour.
+    // Visual heading still eases normally; this changes neither feet nor pose.
+    if(escaping&&path.length)cat.motionHeading=Math.atan2((path[0].y-cat.y)*ASPECT,path[0].x-cat.x);
+  }
   _revalidateSize(cat){
     // A reserved foot position was planned for the old body size. Keep the
     // intent, but release an undersized bed slot before walking to a new one.
@@ -504,8 +538,8 @@ export class CatGame{
         const slots=SLEEP_SLOTS.filter(s=>!s.traversal&&s.id!==originalSlot?.id).sort((a,b)=>preference(a)-preference(b)||distance(moving,a)-distance(moving,b));
         for(const replacement of slots){
           if(!this._slotAvailable(replacement,moving))continue;
-          const path=findPath(moving,replacement,{avoid:this._avoidCats(moving)});if(!path)continue;
-          if(this._assignRest(moving,replacement,{persistent:!!moving.restIntent,kind:moving.restIntent?.kind||moving.afterWalk||moving.state})){moving.path=path;return true;}
+          const plan=this._resizeRestPath(moving,replacement);if(!plan)continue;
+          this._reflowRest(moving,replacement,plan);return true;
         }
       }
       return false;
@@ -521,7 +555,7 @@ export class CatGame{
         }
       }
       for(const diner of diners){
-        const dock=feedingDock(diner,bowl,diner.task.feeding?.seat||-1),path=dock&&findPath(diner,dock);
+        const dock=feedingDock(diner,bowl,diner.task.feeding?.seat||-1),path=dock&&this._findPath(diner,dock);
         if(!dock||!path||!sameSurface(dock,bowl)||this.cats.some(c=>c.active&&!diners.includes(c)&&distance(c.target||c,dock)<spacing(diner,c,COLLISION_SPACE)))return false;
         if(plans.some(p=>distance(p.dock,dock)<spacing(p.cat,diner)))return false;
         plans.push({cat:diner,dock,path});
@@ -537,7 +571,7 @@ export class CatGame{
     if(this._clearSpot(currentTarget,cat))return true;
     const prop=cat.task&&this.props.find(p=>p.id===cat.task.propId);
     const target=this._freePoint(prop||currentTarget,cat,{nearOnly:true,maxRadius:prop?.09:.15});
-    if(!target||!findPath(cat,target))return false;
+    if(!target||!this._findPath(cat,target))return false;
     const previousState=cat.state;
     if(cat.task){cat.task.target=copyPoint(target);cat.task.phase='approach';}
     if(!this._route(cat,target))return false;
@@ -571,7 +605,7 @@ export class CatGame{
     const prop=this.props.find(p=>p.id===id&&p.persistent);if(!prop)return {ok:false,message:'这个道具已经收起。'};
     const selected=catId&&this.cats.find(c=>c.id===catId&&c.active);if(selected&&(selected.traverse||this._onPlatform(selected)))return this._queueGroundAction(selected,{type:'prop',id});
     const candidates=catId?this.cats.filter(c=>c.id===catId&&c.active):this.cats.filter(c=>c.active&&!c.task&&!c.traverse&&!this._onPlatform(c)).sort((a,b)=>(!!a.restIntent-!!b.restIntent)||distance(a,prop)-distance(b,prop));
-    for(const cat of candidates){const target=this._toyDock(cat,prop,prop.tool),path=target&&findPath(cat,target);if(!path)continue;
+    for(const cat of candidates){const target=this._toyDock(cat,prop,prop.tool),path=target&&this._findPath(cat,target);if(!path)continue;
       for(const occupying of this.cats)if(occupying.task?.propId===prop.id)this._cancelInteraction(occupying,true);
       this._release(cat);cat.task={tool:prop.tool,propId:id,target,elapsed:0,phase:'approach',round:0,manual:true};cat.path=path;cat.target=target;cat.state='approach';cat.wait=0;prop.catIds=[cat.id];return {ok:true,catIds:[cat.id],propId:id};
     }return {ok:false,message:'暂时没有能过来玩的猫，点一只猫再试试。'};
@@ -584,11 +618,11 @@ export class CatGame{
     for(const cat of cats){
       if(id==='climbing'){if(this._assignClimb(cat))return {ok:true,catIds:[cat.id],message:`${cat.name}会先走到爬架旁，再轻轻跳上低平台。`};continue;}
       if(['bed','rock','sun'].includes(id)){const slot=this._chooseSleepSlot(cat,id==='rock'?'safe-rock':id==='sun'?'ground':'bed');if(slot&&this._assignRest(cat,slot,{persistent:true,kind:id==='bed'?'sleep':'rest'}))return {ok:true,catIds:[cat.id],message:`${cat.name}正走去${slot.label}。`};continue;}
-      const target=facility.approach,path=findPath(cat,target);if(!path)continue;this._release(cat);cat.path=path;cat.target=copyPoint(target);cat.state='approach';cat.manualRoute=true;cat.afterWalk='observe';cat.expression=null;return {ok:true,catIds:[cat.id]};
+      const target=facility.approach,path=this._findPath(cat,target);if(!path)continue;this._release(cat);cat.path=path;cat.target=copyPoint(target);cat.state='approach';cat.manualRoute=true;cat.afterWalk='observe';cat.expression=null;return {ok:true,catIds:[cat.id]};
     }
     return {ok:false,message:'猫咪现在过不去，等它走近一些。'};
   }
-  removeProp(id){const prop=this.props.find(p=>p.id===id);if(!prop)return {ok:false};this._removeProp(prop);return {ok:true};}
+  removeProp(id){const prop=this.props.find(p=>p.id===id);if(!prop)return {ok:false,message:'这个道具已经收起。'};this._removeProp(prop);return {ok:true,message:'道具已收起。'};}
   moveProp(id,point){const prop=this.props.find(p=>p.id===id);if(!prop||!prop.persistent)return {ok:false,message:'这个道具不能移动。'};if(!isWalkable(point)||surfaceAt(point)?.id==='lower-platform')return {ok:false,message:'请放在空一点的石板地。'};for(const c of this.cats)if(c.task?.propId===id)this._cancelInteraction(c,true);Object.assign(prop,copyPoint(point),{origin:copyPoint(point),catIds:[]});return {ok:true};}
   setEnvironment(patch){this.environment=normalizeEnvironment({...this.environment,...patch});return this.environment;}
 }

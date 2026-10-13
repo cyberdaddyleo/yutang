@@ -1,0 +1,53 @@
+{
+  "animationNames": [
+    "Drink",
+    "Eat",
+    "Groom",
+    "HopDown",
+    "HopUp",
+    "Idle",
+    "Pet",
+    "Play",
+    "Rest",
+    "RestPlush",
+    "Scratch",
+    "Sleep",
+    "SleepPlush",
+    "Walk"
+  ],
+  "vertices": 26209,
+  "contacts": {
+    "frontLeft": {
+      "soleVertices": 29,
+      "minYRange": [
+        -0.00003883325653769197,
+        0.000014413499192008489
+      ],
+      "maxWorldSlipZ": 0.000018258229188661268
+    },
+    "frontRight": {
+      "soleVertices": 29,
+      "minYRange": [
+        -0.000039047914675533184,
+        0.000014187362029376236
+      ],
+      "maxWorldSlipZ": 0.000017533334445984927
+    },
+    "hindLeft": {
+      "soleVertices": 250,
+      "minYRange": [
+        -0.000045214089357562044,
+        7.175041897842118e-9
+      ],
+      "maxWorldSlipZ": 0.000021407570536188802
+    },
+    "hindRight": {
+      "soleVertices": 250,
+      "minYRange": [
+        -0.00004528218167293851,
+        -3.088134925305498e-8
+      ],
+      "maxWorldSlipZ": 0.0000214009858858083
+    }
+  }
+}

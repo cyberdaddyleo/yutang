@@ -1,0 +1,94 @@
+{
+  "sourceGeneratedFile": "source-art/muyu/lantern-standing-v3.png",
+  "sourceFile": "lantern-standing-v3.png",
+  "referenceFile": "user-provided visual reference (local-only)",
+  "generation": "Built-in image_gen; one transparent lamp, initial generation then proportion correction",
+  "sourceSize": [
+    1068,
+    1472
+  ],
+  "visibleBoundsAlphaAbove32": [
+    299,
+    28,
+    784,
+    1443
+  ],
+  "cropBounds": [
+    290,
+    23,
+    792,
+    1448
+  ],
+  "runtimeSize": [
+    361,
+    1024
+  ],
+  "runtimeFile": "lantern-standing-v3.webp",
+  "hasAlpha": true,
+  "paperPolygonsNormalized": [
+    [
+      [
+        0.13546,
+        0.19509
+      ],
+      [
+        0.58765,
+        0.18246
+      ],
+      [
+        0.58765,
+        0.50246
+      ],
+      [
+        0.13347,
+        0.50246
+      ]
+    ],
+    [
+      [
+        0.70518,
+        0.19649
+      ],
+      [
+        0.90438,
+        0.21825
+      ],
+      [
+        0.90438,
+        0.50175
+      ],
+      [
+        0.70518,
+        0.50246
+      ]
+    ]
+  ],
+  "anchorsNormalized": {
+    "lightCenter": [
+      0.52988,
+      0.34737
+    ],
+    "foot": [
+      0.50199,
+      0.99368
+    ],
+    "paperBottom": [
+      0.51594,
+      0.50246
+    ],
+    "bodyBottom": [
+      0.50199,
+      0.62246
+    ]
+  },
+  "suggestedSceneFoot": [
+    1388,
+    491
+  ],
+  "suggestedSceneHeight": 284,
+  "notes": "All anchors normalized against cropped runtime sprite. Keep aspect ratio. Estimated lamp total width at scene height 284 is ~100. No built-in glow or flame. Light the two paper polygons only; no sway (standing on rear console). Mother source has native alpha; only crop/resize/conversion applied.",
+  "prompts": [
+    "Use case: stylized-concept. Asset type: transparent standalone sprite for the electronic wooden-fish desktop scene.\nUse the attached reference as stylistic and construction reference ONLY. Reconstruct ONLY the RIGHT REAR lantern situated behind the mallet, roughly x1450 y355 in the reference. Do NOT reconstruct the front-right floor lantern or the hanging upper lamp.\nOne full slender standing Chinese wooden-and-paper lantern, isolated on genuinely transparent background. Long narrow lantern body, rectangular/hexagonal column, dark aged warm-brown wooden framing and matte cream translucent UNLIT paper faces. Approximately 2/3 front face and 1/3 right side visible, eye level with a small amount of top visible, precisely vertical architectural axis. Simple thin horizontal top cross-bars with small blunt upward end finials, not a pagoda roof and no large curved eaves. Subtle narrow carved bottom lattice below paper, no elaborate gilding.\nPROPORTIONS: full object total height ~260 units; paper lantern body width ~90 units and height ~140 units; below the lantern body a very thin long pedestal shaft and a modest horizontal foot/base, with lower shaft+base height ~95 units. Upper cap ~25 units. Keep it tall and slender. Entire base visible, no cropping.\nMaterials should fit warm realistic illustrated 3D temple background, nuanced aged wood, slightly soft natural texture, no oversharpened product photography, no black plastic or bright metal.\nLighting: unlit neutral soft ambient lighting, cream gray-beige paper, absolutely NO orange luminous paper, no burning candle, no flames, no aura, no light rays, no cast ground shadow, no reflections. Its light will be supplied by the game separately.\nNothing else: no room, no table, no other lamps, no plants, no smoke, no people, no text, no watermark. Small transparent margin around whole asset.",
+    "Edit target: Image 1 is the generated standalone standing lantern. Image 2 is the room composition reference, specifically the tall right rear lamp behind the mallet.\nCorrect THREE things only, retaining the dark wood construction and simple crossbar cap:\n1. Make the FULL object from top finial to bottom feet height only 2.6 times its maximal width. Current object is absurdly skinny and elongated. Desired body width 110 units, total full height 284 units. Top+paper chamber occupies about 166 units of height, bottom lattice 18 units, support shaft+foot remaining about100 units. Paper face itself about140 units tall. Shorten the long thin pole significantly and slightly widen lantern chamber. This is a modest standing lantern on a rear console, not a floor lamp.\n2. Remove ALL dark/amber glow, aura and any background pixels; true transparent alpha only outside solid lantern and inside open gaps in the top. No shadow beneath it, no contact shadow, no ground or pedestal surface.\n3. Make the paper clearly unlit flat neutral beige ivory, no internal glow and no emission or bright central gradient.\nKeep 2/3 frontal + 1/3 right-side view, simple Chinese rectangular wooden framing. No extra objects, no text, no environment, no pagoda roof, no large eaves. Render one complete object, no clipping, tightly framed with small clear transparent margin. This game sprite will be lit later in code. Preserve full wood texture and soft natural edge anti-aliasing, no light halos."
+  ]
+}

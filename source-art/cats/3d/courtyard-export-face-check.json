@@ -1,0 +1,100 @@
+{
+  "faceChecks": [
+    {
+      "preset": "ragdoll",
+      "eyeSize": 0.35,
+      "maxClosedRatio": 0.04137853775027529,
+      "mouthMorphError": 9.105226357329206e-8
+    },
+    {
+      "preset": "british-shorthair",
+      "eyeSize": 0.9,
+      "maxClosedRatio": 0.037401470104526775,
+      "mouthMorphError": 2.428060359684334e-7
+    },
+    {
+      "preset": "chinchilla",
+      "eyeSize": 0.65,
+      "maxClosedRatio": 0.04111798302417638,
+      "mouthMorphError": 4.7043669479399857e-7
+    },
+    {
+      "preset": "american-shorthair",
+      "eyeSize": 0.2,
+      "maxClosedRatio": 0.04285638397491778,
+      "mouthMorphError": 9.105226357329206e-8
+    },
+    {
+      "preset": "siamese",
+      "eyeSize": -0.15,
+      "maxClosedRatio": 0.046753933583334115,
+      "mouthMorphError": 0
+    },
+    {
+      "preset": "domestic-orange-white",
+      "eyeSize": 0.25,
+      "maxClosedRatio": 0.04235217729576447,
+      "mouthMorphError": 9.105226357329206e-8
+    },
+    {
+      "preset": "maine-coon",
+      "eyeSize": 0.15,
+      "maxClosedRatio": 0.04338621861911505,
+      "mouthMorphError": 0
+    },
+    {
+      "preset": "domestic-tabby",
+      "eyeSize": 0.1,
+      "maxClosedRatio": 0.04391229134144625,
+      "mouthMorphError": 0
+    },
+    {
+      "preset": "russian-blue",
+      "eyeSize": -0.15,
+      "maxClosedRatio": 0.046753933583334115,
+      "mouthMorphError": 0
+    },
+    {
+      "preset": "norwegian-forest",
+      "eyeSize": 0.2,
+      "maxClosedRatio": 0.04285659810984193,
+      "mouthMorphError": 7.587688637827383e-8
+    },
+    {
+      "preset": "domestic-tuxedo",
+      "eyeSize": 0.3,
+      "maxClosedRatio": 0.04186011541871216,
+      "mouthMorphError": 6.070150918232088e-8
+    },
+    {
+      "preset": "domestic-calico",
+      "eyeSize": 0.3,
+      "maxClosedRatio": 0.04185969667344963,
+      "mouthMorphError": 9.105226357329206e-8
+    },
+    {
+      "preset": "persian",
+      "eyeSize": 0.85,
+      "maxClosedRatio": 0.04225769267385255,
+      "mouthMorphError": 6.449535332123248e-7
+    },
+    {
+      "preset": "exotic-shorthair",
+      "eyeSize": 1,
+      "maxClosedRatio": 0.039540911897348256,
+      "mouthMorphError": 5.690766470062958e-7
+    },
+    {
+      "preset": "bengal",
+      "eyeSize": 0.05,
+      "maxClosedRatio": 0.04445127827596177,
+      "mouthMorphError": 0
+    },
+    {
+      "preset": "abyssinian",
+      "eyeSize": -0.15,
+      "maxClosedRatio": 0.046753933583334115,
+      "mouthMorphError": 0
+    }
+  ]
+}

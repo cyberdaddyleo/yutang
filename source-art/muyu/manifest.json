@@ -1,0 +1,224 @@
+{
+  "walnut": {
+    "sourceSize": [
+      1511,
+      1041
+    ],
+    "visibleBounds": [
+      132,
+      63,
+      1392,
+      993
+    ],
+    "runtimeSize": [
+      1024,
+      756
+    ],
+    "file": "walnut.webp",
+    "alpha": true
+  },
+  "ebony": {
+    "sourceSize": [
+      1511,
+      1041
+    ],
+    "visibleBounds": [
+      132,
+      59,
+      1395,
+      995
+    ],
+    "runtimeSize": [
+      1024,
+      759
+    ],
+    "file": "ebony.webp",
+    "alpha": true
+  },
+  "jade": {
+    "sourceSize": [
+      1511,
+      1041
+    ],
+    "visibleBounds": [
+      130,
+      62,
+      1395,
+      995
+    ],
+    "runtimeSize": [
+      1024,
+      755
+    ],
+    "file": "jade.webp",
+    "alpha": true
+  },
+  "celadon": {
+    "sourceSize": [
+      1511,
+      1041
+    ],
+    "visibleBounds": [
+      131,
+      58,
+      1398,
+      994
+    ],
+    "runtimeSize": [
+      1024,
+      756
+    ],
+    "file": "celadon.webp",
+    "alpha": true
+  },
+  "lacquer": {
+    "sourceSize": [
+      1511,
+      1041
+    ],
+    "visibleBounds": [
+      130,
+      60,
+      1395,
+      994
+    ],
+    "runtimeSize": [
+      1024,
+      756
+    ],
+    "file": "lacquer.webp",
+    "alpha": true
+  },
+  "gold": {
+    "sourceSize": [
+      1511,
+      1041
+    ],
+    "visibleBounds": [
+      130,
+      51,
+      1397,
+      996
+    ],
+    "runtimeSize": [
+      1024,
+      764
+    ],
+    "file": "gold.webp",
+    "alpha": true
+  },
+  "bamboo": {
+    "sourceSize": [
+      1510,
+      1041
+    ],
+    "visibleBounds": [
+      131,
+      59,
+      1395,
+      997
+    ],
+    "runtimeSize": [
+      1024,
+      760
+    ],
+    "file": "bamboo.webp",
+    "alpha": true
+  },
+  "clay": {
+    "sourceSize": [
+      1511,
+      1041
+    ],
+    "visibleBounds": [
+      130,
+      58,
+      1395,
+      994
+    ],
+    "runtimeSize": [
+      1024,
+      758
+    ],
+    "file": "clay.webp",
+    "alpha": true
+  },
+  "pad": {
+    "sourceSize": [
+      1672,
+      941
+    ],
+    "visibleBounds": [
+      56,
+      261,
+      1617,
+      751
+    ],
+    "runtimeSize": [
+      1024,
+      321
+    ],
+    "file": "pad.webp",
+    "alpha": true
+  },
+  "mallet": {
+    "sourceSize": [
+      1706,
+      922
+    ],
+    "visibleBounds": [
+      67,
+      71,
+      1648,
+      868
+    ],
+    "runtimeSize": [
+      1024,
+      516
+    ],
+    "file": "mallet.webp",
+    "alpha": true
+  },
+  "lantern": {
+    "sourceSize": [
+      1024,
+      1536
+    ],
+    "visibleBounds": [
+      106,
+      36,
+      919,
+      1478
+    ],
+    "runtimeSize": [
+      577,
+      1024
+    ],
+    "file": "lantern.webp",
+    "alpha": true
+  },
+  "room": {
+    "sourceSize": [
+      1672,
+      941
+    ],
+    "runtimeSize": [
+      1672,
+      941
+    ],
+    "file": "room.webp",
+    "alpha": false
+  },
+  "window-bamboo": {
+    "sourceSize": [
+      1024,
+      1536
+    ],
+    "runtimeSize": [
+      683,
+      1024
+    ],
+    "file": "window-bamboo.webp",
+    "alpha": true
+  }
+}

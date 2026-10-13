@@ -1,0 +1,580 @@
+{
+  "variants": {
+    "ragdoll": {
+      "Sleep": {
+        "clip": "SleepPlush",
+        "minBodyY": -0.0015602395352056352
+      },
+      "Rest": {
+        "clip": "RestPlush",
+        "minBodyY": -0.00029255898895258665
+      },
+      "Walk": {
+        "clip": "Walk",
+        "minBodyY": -1.4624110241703894e-7
+      },
+      "Eat": {
+        "clip": "Eat",
+        "minBodyY": 9.020329735779005e-8
+      }
+    },
+    "ragdoll:max-build": {
+      "Sleep": {
+        "clip": "SleepPlush",
+        "minBodyY": -0.0015602395352056352
+      },
+      "Rest": {
+        "clip": "RestPlush",
+        "minBodyY": -0.00029255898895258665
+      },
+      "Walk": {
+        "clip": "Walk",
+        "minBodyY": -1.4624110241703894e-7
+      },
+      "Eat": {
+        "clip": "Eat",
+        "minBodyY": 9.020329735779005e-8
+      }
+    },
+    "british-shorthair": {
+      "Sleep": {
+        "clip": "SleepPlush",
+        "minBodyY": -0.0015602395352056352
+      },
+      "Rest": {
+        "clip": "RestPlush",
+        "minBodyY": -0.00029255898895258665
+      },
+      "Walk": {
+        "clip": "Walk",
+        "minBodyY": -1.4624110241703894e-7
+      },
+      "Eat": {
+        "clip": "Eat",
+        "minBodyY": 9.020329735779005e-8
+      }
+    },
+    "british-shorthair:max-build": {
+      "Sleep": {
+        "clip": "SleepPlush",
+        "minBodyY": -0.0015602395352056352
+      },
+      "Rest": {
+        "clip": "RestPlush",
+        "minBodyY": -0.00029255898895258665
+      },
+      "Walk": {
+        "clip": "Walk",
+        "minBodyY": -1.4624110241703894e-7
+      },
+      "Eat": {
+        "clip": "Eat",
+        "minBodyY": 9.020329735779005e-8
+      }
+    },
+    "chinchilla": {
+      "Sleep": {
+        "clip": "SleepPlush",
+        "minBodyY": -0.0015602395352056352
+      },
+      "Rest": {
+        "clip": "RestPlush",
+        "minBodyY": -0.00029255898895258665
+      },
+      "Walk": {
+        "clip": "Walk",
+        "minBodyY": -1.4624110241703894e-7
+      },
+      "Eat": {
+        "clip": "Eat",
+        "minBodyY": 9.020329735779005e-8
+      }
+    },
+    "chinchilla:max-build": {
+      "Sleep": {
+        "clip": "SleepPlush",
+        "minBodyY": -0.0015602395352056352
+      },
+      "Rest": {
+        "clip": "RestPlush",
+        "minBodyY": -0.00029255898895258665
+      },
+      "Walk": {
+        "clip": "Walk",
+        "minBodyY": -1.4624110241703894e-7
+      },
+      "Eat": {
+        "clip": "Eat",
+        "minBodyY": 9.020329735779005e-8
+      }
+    },
+    "american-shorthair": {
+      "Sleep": {
+        "clip": "Sleep",
+        "minBodyY": -0.0015603892227730005
+      },
+      "Rest": {
+        "clip": "Rest",
+        "minBodyY": -0.00029275748805627426
+      },
+      "Walk": {
+        "clip": "Walk",
+        "minBodyY": -1.4624110241703894e-7
+      },
+      "Eat": {
+        "clip": "Eat",
+        "minBodyY": 9.020329735779005e-8
+      }
+    },
+    "american-shorthair:max-build": {
+      "Sleep": {
+        "clip": "SleepPlush",
+        "minBodyY": -0.0015602395352056352
+      },
+      "Rest": {
+        "clip": "RestPlush",
+        "minBodyY": -0.00029255898895258665
+      },
+      "Walk": {
+        "clip": "Walk",
+        "minBodyY": -1.4624110241703894e-7
+      },
+      "Eat": {
+        "clip": "Eat",
+        "minBodyY": 9.020329735779005e-8
+      }
+    },
+    "siamese": {
+      "Sleep": {
+        "clip": "Sleep",
+        "minBodyY": -0.0015603892227730005
+      },
+      "Rest": {
+        "clip": "Rest",
+        "minBodyY": -0.00029275748805627426
+      },
+      "Walk": {
+        "clip": "Walk",
+        "minBodyY": -1.4624110241703894e-7
+      },
+      "Eat": {
+        "clip": "Eat",
+        "minBodyY": 9.020329735779005e-8
+      }
+    },
+    "siamese:max-build": {
+      "Sleep": {
+        "clip": "Sleep",
+        "minBodyY": -0.0015603892227730005
+      },
+      "Rest": {
+        "clip": "Rest",
+        "minBodyY": -0.00029275748805627426
+      },
+      "Walk": {
+        "clip": "Walk",
+        "minBodyY": -1.4624110241703894e-7
+      },
+      "Eat": {
+        "clip": "Eat",
+        "minBodyY": 9.020329735779005e-8
+      }
+    },
+    "domestic-orange-white": {
+      "Sleep": {
+        "clip": "Sleep",
+        "minBodyY": -0.0015603892227730005
+      },
+      "Rest": {
+        "clip": "Rest",
+        "minBodyY": -0.00029275748805627426
+      },
+      "Walk": {
+        "clip": "Walk",
+        "minBodyY": -1.4624110241703894e-7
+      },
+      "Eat": {
+        "clip": "Eat",
+        "minBodyY": 9.020329735779005e-8
+      }
+    },
+    "domestic-orange-white:max-build": {
+      "Sleep": {
+        "clip": "SleepPlush",
+        "minBodyY": -0.0015602395352056352
+      },
+      "Rest": {
+        "clip": "RestPlush",
+        "minBodyY": -0.00029255898895258665
+      },
+      "Walk": {
+        "clip": "Walk",
+        "minBodyY": -1.4624110241703894e-7
+      },
+      "Eat": {
+        "clip": "Eat",
+        "minBodyY": 9.020329735779005e-8
+      }
+    },
+    "maine-coon": {
+      "Sleep": {
+        "clip": "SleepPlush",
+        "minBodyY": -0.0015602395352056352
+      },
+      "Rest": {
+        "clip": "RestPlush",
+        "minBodyY": -0.00029255898895258665
+      },
+      "Walk": {
+        "clip": "Walk",
+        "minBodyY": -1.4624110241703894e-7
+      },
+      "Eat": {
+        "clip": "Eat",
+        "minBodyY": 9.020329735779005e-8
+      }
+    },
+    "maine-coon:max-build": {
+      "Sleep": {
+        "clip": "SleepPlush",
+        "minBodyY": -0.0015602395352056352
+      },
+      "Rest": {
+        "clip": "RestPlush",
+        "minBodyY": -0.00029255898895258665
+      },
+      "Walk": {
+        "clip": "Walk",
+        "minBodyY": -1.4624110241703894e-7
+      },
+      "Eat": {
+        "clip": "Eat",
+        "minBodyY": 9.020329735779005e-8
+      }
+    },
+    "domestic-tabby": {
+      "Sleep": {
+        "clip": "Sleep",
+        "minBodyY": -0.0015603892227730005
+      },
+      "Rest": {
+        "clip": "Rest",
+        "minBodyY": -0.00029275748805627426
+      },
+      "Walk": {
+        "clip": "Walk",
+        "minBodyY": -1.4624110241703894e-7
+      },
+      "Eat": {
+        "clip": "Eat",
+        "minBodyY": 9.020329735779005e-8
+      }
+    },
+    "domestic-tabby:max-build": {
+      "Sleep": {
+        "clip": "Sleep",
+        "minBodyY": -0.0015603892227730005
+      },
+      "Rest": {
+        "clip": "Rest",
+        "minBodyY": -0.00029275748805627426
+      },
+      "Walk": {
+        "clip": "Walk",
+        "minBodyY": -1.4624110241703894e-7
+      },
+      "Eat": {
+        "clip": "Eat",
+        "minBodyY": 9.020329735779005e-8
+      }
+    },
+    "russian-blue": {
+      "Sleep": {
+        "clip": "Sleep",
+        "minBodyY": -0.0015603892227730005
+      },
+      "Rest": {
+        "clip": "Rest",
+        "minBodyY": -0.00029275748805627426
+      },
+      "Walk": {
+        "clip": "Walk",
+        "minBodyY": -1.4624110241703894e-7
+      },
+      "Eat": {
+        "clip": "Eat",
+        "minBodyY": 9.020329735779005e-8
+      }
+    },
+    "russian-blue:max-build": {
+      "Sleep": {
+        "clip": "Sleep",
+        "minBodyY": -0.0015603892227730005
+      },
+      "Rest": {
+        "clip": "Rest",
+        "minBodyY": -0.00029275748805627426
+      },
+      "Walk": {
+        "clip": "Walk",
+        "minBodyY": -1.4624110241703894e-7
+      },
+      "Eat": {
+        "clip": "Eat",
+        "minBodyY": 9.020329735779005e-8
+      }
+    },
+    "norwegian-forest": {
+      "Sleep": {
+        "clip": "SleepPlush",
+        "minBodyY": -0.0015602395352056352
+      },
+      "Rest": {
+        "clip": "RestPlush",
+        "minBodyY": -0.00029255898895258665
+      },
+      "Walk": {
+        "clip": "Walk",
+        "minBodyY": -1.4624110241703894e-7
+      },
+      "Eat": {
+        "clip": "Eat",
+        "minBodyY": 9.020329735779005e-8
+      }
+    },
+    "norwegian-forest:max-build": {
+      "Sleep": {
+        "clip": "SleepPlush",
+        "minBodyY": -0.0015602395352056352
+      },
+      "Rest": {
+        "clip": "RestPlush",
+        "minBodyY": -0.00029255898895258665
+      },
+      "Walk": {
+        "clip": "Walk",
+        "minBodyY": -1.4624110241703894e-7
+      },
+      "Eat": {
+        "clip": "Eat",
+        "minBodyY": 9.020329735779005e-8
+      }
+    },
+    "domestic-tuxedo": {
+      "Sleep": {
+        "clip": "Sleep",
+        "minBodyY": -0.0015603892227730005
+      },
+      "Rest": {
+        "clip": "Rest",
+        "minBodyY": -0.00029275748805627426
+      },
+      "Walk": {
+        "clip": "Walk",
+        "minBodyY": -1.4624110241703894e-7
+      },
+      "Eat": {
+        "clip": "Eat",
+        "minBodyY": 9.020329735779005e-8
+      }
+    },
+    "domestic-tuxedo:max-build": {
+      "Sleep": {
+        "clip": "SleepPlush",
+        "minBodyY": -0.0015602395352056352
+      },
+      "Rest": {
+        "clip": "RestPlush",
+        "minBodyY": -0.00029255898895258665
+      },
+      "Walk": {
+        "clip": "Walk",
+        "minBodyY": -1.4624110241703894e-7
+      },
+      "Eat": {
+        "clip": "Eat",
+        "minBodyY": 9.020329735779005e-8
+      }
+    },
+    "domestic-calico": {
+      "Sleep": {
+        "clip": "Sleep",
+        "minBodyY": -0.0015603892227730005
+      },
+      "Rest": {
+        "clip": "Rest",
+        "minBodyY": -0.00029275748805627426
+      },
+      "Walk": {
+        "clip": "Walk",
+        "minBodyY": -1.4624110241703894e-7
+      },
+      "Eat": {
+        "clip": "Eat",
+        "minBodyY": 9.020329735779005e-8
+      }
+    },
+    "domestic-calico:max-build": {
+      "Sleep": {
+        "clip": "SleepPlush",
+        "minBodyY": -0.0015602395352056352
+      },
+      "Rest": {
+        "clip": "RestPlush",
+        "minBodyY": -0.00029255898895258665
+      },
+      "Walk": {
+        "clip": "Walk",
+        "minBodyY": -1.4624110241703894e-7
+      },
+      "Eat": {
+        "clip": "Eat",
+        "minBodyY": 9.020329735779005e-8
+      }
+    },
+    "persian": {
+      "Sleep": {
+        "clip": "SleepPlush",
+        "minBodyY": -0.0015602395352056352
+      },
+      "Rest": {
+        "clip": "RestPlush",
+        "minBodyY": -0.00029255898895258665
+      },
+      "Walk": {
+        "clip": "Walk",
+        "minBodyY": -1.4624110241703894e-7
+      },
+      "Eat": {
+        "clip": "Eat",
+        "minBodyY": 9.020329735779005e-8
+      }
+    },
+    "persian:max-build": {
+      "Sleep": {
+        "clip": "SleepPlush",
+        "minBodyY": -0.0015602395352056352
+      },
+      "Rest": {
+        "clip": "RestPlush",
+        "minBodyY": -0.00029255898895258665
+      },
+      "Walk": {
+        "clip": "Walk",
+        "minBodyY": -1.4624110241703894e-7
+      },
+      "Eat": {
+        "clip": "Eat",
+        "minBodyY": 9.020329735779005e-8
+      }
+    },
+    "exotic-shorthair": {
+      "Sleep": {
+        "clip": "SleepPlush",
+        "minBodyY": -0.0015602395352056352
+      },
+      "Rest": {
+        "clip": "RestPlush",
+        "minBodyY": -0.00029255898895258665
+      },
+      "Walk": {
+        "clip": "Walk",
+        "minBodyY": -1.4624110241703894e-7
+      },
+      "Eat": {
+        "clip": "Eat",
+        "minBodyY": 9.020329735779005e-8
+      }
+    },
+    "exotic-shorthair:max-build": {
+      "Sleep": {
+        "clip": "SleepPlush",
+        "minBodyY": -0.0015602395352056352
+      },
+      "Rest": {
+        "clip": "RestPlush",
+        "minBodyY": -0.00029255898895258665
+      },
+      "Walk": {
+        "clip": "Walk",
+        "minBodyY": -1.4624110241703894e-7
+      },
+      "Eat": {
+        "clip": "Eat",
+        "minBodyY": 9.020329735779005e-8
+      }
+    },
+    "bengal": {
+      "Sleep": {
+        "clip": "Sleep",
+        "minBodyY": -0.0015603892227730005
+      },
+      "Rest": {
+        "clip": "Rest",
+        "minBodyY": -0.00029275748805627426
+      },
+      "Walk": {
+        "clip": "Walk",
+        "minBodyY": -1.4624110241703894e-7
+      },
+      "Eat": {
+        "clip": "Eat",
+        "minBodyY": 9.020329735779005e-8
+      }
+    },
+    "bengal:max-build": {
+      "Sleep": {
+        "clip": "Sleep",
+        "minBodyY": -0.0015603892227730005
+      },
+      "Rest": {
+        "clip": "Rest",
+        "minBodyY": -0.00029275748805627426
+      },
+      "Walk": {
+        "clip": "Walk",
+        "minBodyY": -1.4624110241703894e-7
+      },
+      "Eat": {
+        "clip": "Eat",
+        "minBodyY": 9.020329735779005e-8
+      }
+    },
+    "abyssinian": {
+      "Sleep": {
+        "clip": "Sleep",
+        "minBodyY": -0.0015603892227730005
+      },
+      "Rest": {
+        "clip": "Rest",
+        "minBodyY": -0.00029275748805627426
+      },
+      "Walk": {
+        "clip": "Walk",
+        "minBodyY": -1.4624110241703894e-7
+      },
+      "Eat": {
+        "clip": "Eat",
+        "minBodyY": 9.020329735779005e-8
+      }
+    },
+    "abyssinian:max-build": {
+      "Sleep": {
+        "clip": "Sleep",
+        "minBodyY": -0.0015603892227730005
+      },
+      "Rest": {
+        "clip": "Rest",
+        "minBodyY": -0.00029275748805627426
+      },
+      "Walk": {
+        "clip": "Walk",
+        "minBodyY": -1.4624110241703894e-7
+      },
+      "Eat": {
+        "clip": "Eat",
+        "minBodyY": 9.020329735779005e-8
+      }
+    }
+  }
+}

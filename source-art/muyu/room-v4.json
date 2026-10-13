@@ -1,0 +1,16 @@
+{
+  "generator": "built-in image_gen",
+  "reference": "User supplied original dark walnut room, 2026-10-13",
+  "warm": "Room lighting-weather edit: preserve original room geometry, empty table, furniture and props positions; restore rich dark walnut, warm honey/amber bounce and tabletop/floor reflections, cinematic background softness. No lamps, flames, smoke, moon, woodfish, mallet, pad or beads. Static ink 静 restored to existing scroll.",
+  "day": "Matching lighting-weather edit of room-warm-v4: preserve camera and every architectural edge, carved wood, flowers, books, ink 静 and urn; remove all golden artificial light and reflections, neutral daylight; no lamps, flames, smoke, moon, woodfish, mallet, pad or beads.",
+  "runtimeSize": [
+    1672,
+    941
+  ],
+  "composition": "Both plates remain independent from animated lamps/flames/moon/smoke and eight selectable woodfish materials. Neutral plate used for daylight and lights off. Night/warm plate only with lights on. Original room.webp preserved as fallback.",
+  "files": [
+    "room-warm-v4.png",
+    "room-day-v4.png"
+  ],
+  "conversion": "RGB WebP quality 94, no resizing or repainting"
+}

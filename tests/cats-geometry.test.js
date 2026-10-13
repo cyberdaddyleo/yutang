@@ -35,7 +35,7 @@ test('season and local clock phase boundaries follow the courtyard specification
  assert.equal(resolveEnvironment({season:'summer',time:'night',fireflies:false}).fireflyCount,0);
  assert.equal(resolveEnvironment({season:'spring',time:'day'}).fireflyCount,0);
  assert.ok(resolveEnvironment({season:'summer',time:'night'}).fireflyCount>0);
- assert.deepEqual(normalizeEnvironment({time:'bad',season:'bad'}),{season:'auto',time:'auto',fireflies:true,particles:true,music:true,musicVolume:.35});
+ assert.deepEqual(normalizeEnvironment({time:'bad',season:'bad'}),{season:'auto',time:'auto',fireflies:true,particles:true});
 });
 test('a blocked straight line is replaced with a valid multi-segment route',()=>{
  let fixture=null;

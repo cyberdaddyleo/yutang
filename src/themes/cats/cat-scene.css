@@ -6,3 +6,5 @@
 .theme-cats:has(.cat-tool-pill) .feed-hint{visibility:hidden}
 
 .cat-time-choices>button{min-height:76px}.cat-time-choices>button>svg{width:23px;height:23px}.cat-time-choices small{line-height:1.7}
+
+.cat-prop-actions{position:absolute;z-index:5;transform:translate(-50%,-100%);display:flex;align-items:center;gap:8px;padding:9px 10px 9px 14px;border:1px solid #e4f3d778;border-radius:18px;background:#214b3ef2;color:#f0f9df;box-shadow:0 4px 20px #203d2630;white-space:nowrap;font-size:12px}.cat-prop-actions strong{font-weight:500;margin-right:3px}.cat-prop-actions button{display:flex;align-items:center;gap:5px;padding:8px;border-radius:10px}.cat-prop-actions .icon-button{padding:6px}.cat-placed-props{margin-top:0;margin-bottom:8px}.cat-facility-list>div>span:last-child{display:flex;align-items:center;gap:9px}.cat-put-away{display:flex;align-items:center;gap:6px;padding:8px 10px;border:1px solid var(--line);border-radius:9px}

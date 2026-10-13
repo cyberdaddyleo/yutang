@@ -29,3 +29,17 @@ test('undo cannot relight incense extinguished or ended by storing/removing its 
 test('the last drawn item at the same depth is also the first hit',async()=>{const {CaiyuanRenderer}=await import('../src/themes/caiyuan/renderer.js'),items=[{id:'under',kind:'cup',x:.5,y:.85,scale:1},{id:'over',kind:'cup',x:.5,y:.85,scale:1}],b=geo.bounds(items[0]);assert.equal(CaiyuanRenderer.prototype.hit.call({t:{width:1600},alpha:{}},{x:b.x+b.w*.5,y:b.y+b.h*.5},items)?.id,'over')});
 
 test('removed blessing feature never redraws or mutates legacy records',()=>{const legacy={daily:{date:'2026-09-30',index:2},blessingHistory:{'2026-09-30':2},favorites:[2,7]};const m=model(legacy);const saved=m.snapshot();m.tick(now+86400000);assert.deepEqual(m.state.daily,legacy.daily);assert.deepEqual(m.state.blessingHistory,legacy.blessingHistory);assert.equal(m.command('blessing',null,now).ok,false);assert.equal(m.command('favorite',2,now).ok,false);const restored=new api.CaiyuanModel(saved,now+86400000).snapshot();assert.deepEqual(restored.favorites,legacy.favorites);assert.deepEqual(restored.items,saved.items)});
+
+test('incense remains inserted behind the front lip while shortening, moving and scaling',()=>{
+ for(const scale of [.7,1,1.4])for(const x of [.35,.5,.65]){
+  const item={kind:'burner',x,y:.86,scale},b=geo.bounds(item),m=geo.BURNER_MOUTH;
+  const initial=geo.incenseGeometry(item,0);
+  for(const progress of [0,.25,.5,.99,1])for(const [index,s] of geo.incenseGeometry(item,progress).entries()){
+   const localX=(s.x-b.x)/b.w,front=b.y+b.h*(m.y+m.radiusY*Math.sqrt(1-((localX-m.x)/m.radiusX)**2));
+   assert.ok(s.baseY>front,'The lower end must remain buried behind the front rim');
+   assert.ok(s.tipY<front,'Even the remaining short stem projects from the ash bed');
+   assert.equal(s.baseY,initial[index].baseY,'Burning moves only the upper end');
+   assert.ok(Math.abs((s.tipY+s.height)-s.baseY)<1e-12);
+  }
+ }
+});

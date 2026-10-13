@@ -114,8 +114,8 @@ test('edge gait follows the painted height: low lips are walked, small rises hop
  assert.equal(TRAVERSAL_TIMING.stride.crouch,0);assert.ok(TRAVERSAL_TIMING.hop.jump<TRAVERSAL_TIMING.jump.jump);
 });
 
-test('walking onto the low bed edge keeps the ordinary gait instead of a crouch',()=>{
+test('the woven bed rim is a gathered jump rather than a flat walking edge',()=>{
  const game=make(),cat=game.cats[0];Object.assign(cat,FACILITIES.water.approach);assert.ok(game.setActive(cat.id,false).ok);
  const seen=new Set();for(let i=0;i<60*30&&cat.state!=='sleep';i++){game.update(1/30,{});const m=cat.traverse;if(m){seen.add(m.style);if(m.style==='stride'){assert.equal(m.phase,'jump');assert.equal(cat.state,'walk');assert.ok(cat.speed>0,'the cat keeps walking over a low lip');assert.ok(m.jumpHeight<.002)}}}
- assert.equal(cat.state,'sleep');assert.equal(surfaceAt(cat).id,'bed');assert.ok(seen.has('stride')||seen.has('hop'));
+ assert.equal(cat.state,'sleep');assert.equal(surfaceAt(cat).id,'bed');assert.ok(seen.has('jump'),'the raised woven rim must be cleared');
 });

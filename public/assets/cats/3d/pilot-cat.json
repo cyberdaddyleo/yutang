@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "asset": "pilot-cat.glb",
+  "status": "locomotion-pilot-not-final-art",
+  "modelLength": 0.7,
+  "cameraElevationDegrees": 55,
+  "scale": 1,
+  "groundOffset": 0,
+  "walkStride": 0.24,
+  "walkDuration": 1.2,
+  "stanceFraction": 0.64,
+  "forwardAxis": "+Z",
+  "upAxis": "+Y",
+  "rootMotionNodes": [],
+  "jumpSections": {
+    "crouch": 0.22,
+    "jump": 0.73
+  },
+  "footBones": {
+    "frontLeft": "FrontLPaw",
+    "frontRight": "FrontRPaw",
+    "hindLeft": "HindLPaw",
+    "hindRight": "HindRPaw"
+  },
+  "clips": {
+    "Idle": {
+      "duration": 3.2,
+      "frames": 97,
+      "fps": 30,
+      "action": "Idle",
+      "loop": true
+    },
+    "Walk": {
+      "duration": 1.2,
+      "frames": 37,
+      "fps": 30,
+      "action": "Walk",
+      "loop": true
+    },
+    "HopUp": {
+      "duration": 0.7333333333333333,
+      "frames": 23,
+      "fps": 30,
+      "action": "HopUp",
+      "loop": false
+    },
+    "HopDown": {
+      "duration": 0.6666666666666666,
+      "frames": 21,
+      "fps": 30,
+      "action": "HopDown",
+      "loop": false
+    }
+  },
+  "deformBoneCount": 28,
+  "vertexCount": 22650,
+  "source": {
+    "author": "JonasDichelle",
+    "conversionBy": "Antti Nuortimo",
+    "url": "https://blendswap.com/blend/18519",
+    "download": "https://raw.githubusercontent.com/nrz/ylikuutio/master/res/objects/www.blendswap.com/86110_rigged_and_animated_cat/cat.fbx",
+    "license": "CC-BY-3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0/"
+  },
+  "changes": "Original continuous body retained. Newly authored quadruped armature, Blender heat skinning, IK control rig, baked in-place Idle/Walk/HopUp/HopDown clips, warm-grey material and skinned eye/nose additions. No original animation was in the public FBX.",
+  "notes": [
+    "World displacement and jump arc must be applied by the game, not the clips.",
+    "Control actions and muted IK constraints remain in the .blend for editing; GLB contains baked deformation joints.",
+    "Shading/coat styling is provisional and needs visual approval before replacing existing cats."
+  ]
+}

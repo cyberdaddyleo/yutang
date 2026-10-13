@@ -39,12 +39,6 @@
       "url": "https://freesound.org/people/stevielematt/sounds/707827/",
       "download": "Official publicly accessible high-quality MP3 preview"
     },
-    "wind": {
-      "title": "Wind(leaves).WAV",
-      "author": "o_ciz",
-      "url": "https://freesound.org/people/o_ciz/sounds/475448/",
-      "download": "Previously bundled CC0 field recording, reused locally"
-    },
     "bird": {
       "title": "White-crowned Sparrow Chirp",
       "author": "Zott820",
@@ -134,17 +128,6 @@
         0.63
       ],
       "processing": "Mono 24kHz 16-bit PCM; 210–1600 Hz gentle band shaping; soft transient knee; 0.035s / 0.09s fades; peak 0.08; no pitch change; recorded padded-tap accents at 0.02s / 0.25s"
-    },
-    {
-      "file": "wind-bed.wav",
-      "source": "wind",
-      "processedSource": "public/assets/wind.wav",
-      "processedSourceIntervalSeconds": [
-        9,
-        21
-      ],
-      "processing": "Original leaf-wind field recording, stationary-noise reduction, gentle 190–1550 Hz shaping, three softly faded gusts separated by quiet intervals; no synthesized noise or loudness normalization",
-      "durationSeconds": 28
     },
     {
       "file": "bird.wav",

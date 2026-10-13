@@ -36,6 +36,28 @@ export function loadSettings() {
   };
 }
 
+const THEME_DAY_KEY = 'mofish-theme-day-v1';
+const dayChoice = value => ['auto', 'day', 'night'].includes(value) ? value : 'auto';
+const normalizedThemeDays = value => ({koi:dayChoice(value?.koi),coast:dayChoice(value?.coast)});
+
+/** Koi/coast used to share settings.day. Preserve their current appearance once,
+ * then keep their choices separate. Cats and Caiyuan retain their own stores. */
+export function loadThemeDays(legacyDay = 'auto') {
+  let raw = null;
+  try { raw = localStorage.getItem(THEME_DAY_KEY); } catch {}
+  if (raw === null) return {koi:dayChoice(legacyDay),coast:dayChoice(legacyDay)};
+  return normalizedThemeDays(readStore(THEME_DAY_KEY, {}));
+}
+
+export function updateThemeDay(days, theme, value) {
+  if (!['koi','coast'].includes(theme) || !['auto','day','night'].includes(value)) return days;
+  return {...days,[theme]:value};
+}
+
+export function saveThemeDays(days) {
+  return writeStore(THEME_DAY_KEY, normalizedThemeDays(days));
+}
+
 export function loadFish() {
   const stored = readStore('fusheng-fish', []);
   if (!Array.isArray(stored)) return [];

@@ -1,7 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {catWindGain,prepareCatWindSample} from '../src/themes/cats/wind-audio.js';
 import {CatAudio,CAT_CUES,synthesizeCatCue,catOutputGain,catAmbientDelay,CAT_SAMPLE_FILES,decodeCatSample} from '../src/themes/cats/audio.js';
 
 function fixture(t,loader=async()=>null){
@@ -41,7 +40,7 @@ test('purr includes breathing and rapid throat flutter instead of a sustained si
 });
 
 test('every courtyard tool has a distinct offline cue instead of silently falling back to tap',()=>{
- const kinds=['purr','food','scratch','yarn','mouse','feather','step','bird','cricket'];
+ const kinds=['purr','food','scratch','yarn','mouse','feather','step','bird'];
  const signatures=new Set();
  for(const kind of kinds){assert.ok(CAT_CUES[kind],`${kind} must be registered`);const pcm=synthesizeCatCue(kind);let sum=0;for(let i=0;i<pcm.length;i+=31)sum+=pcm[i]**2;signatures.add(`${pcm.length}:${sum}`)}
  assert.equal(signatures.size,kinds.length);
@@ -94,14 +93,13 @@ test('preview respects mute and can repeat without waiting for the interaction c
  assert.equal(await audio.cue('meow'),false);assert.equal(await audio.cue('meow',{preview:true}),true);
 });
 
-test('observation ambience is sparse, day/night specific and never catches up offline',async t=>{
+test('observation uses sparse daytime birds, quiet nights and no offline catch-up',async t=>{
  const {audio,contexts,advance}=fixture(t);audio.random=()=>0;await audio.unlock();const day={season:'spring',time:'day'};
  audio.update(.1,day);await new Promise(r=>setTimeout(r,0));
  audio.ambientClock=audio.nextAmbient;audio.update(.1,day);await new Promise(r=>setTimeout(r,0));assert.equal([...audio.nodes][0]?.kind,'bird');
  [...audio.nodes][0].voice.finish();const count=contexts[0].voices.length;advance(100000);audio.update(86400,day);assert.equal(contexts[0].voices.length,count,'a resumed frame must not replay offline events');
- audio.update(.1,{season:'spring',time:'night'});assert.ok(audio.nextAmbient>=35);
- audio.ambientClock=audio.nextAmbient;audio.update(.1,{season:'spring',time:'night'});await new Promise(r=>setTimeout(r,0));assert.equal([...audio.nodes][0]?.kind,'cricket');
- audio.update(.1,{season:'winter',time:'night'});assert.equal(audio.nodes.size,0);assert.equal(audio.nextAmbient,Infinity);
+ audio.update(.1,{season:'spring',time:'night'});assert.equal(audio.nextAmbient,Infinity);assert.equal(audio.nodes.size,0);
+ audio.update(.1,{season:'winter',time:'night'});assert.equal(audio.nextAmbient,Infinity);
  assert.ok(catAmbientDelay(day,false,0)>=35);assert.ok(catAmbientDelay(day,false,1)<=80);assert.ok(catAmbientDelay({time:'day',season:'winter'},false,0)>=90);
  audio.stop();assert.equal(audio.queued,null);assert.equal(audio.nextAmbient,Infinity);
 });
@@ -161,28 +159,6 @@ test('truncated, invalid or oversized local WAVs are rejected before playback',(
 });
 
 
-test('wind bed has its own loop and never occupies or blocks the interaction voice',async t=>{
- const {audio,contexts}=fixture(t,async id=>id==='wind'?{sampleRate:24000,data:new Float32Array(24000).fill(.03)}:null);
- await audio.unlock();audio.update(.1,{season:'spring',time:'day'});await new Promise(r=>setTimeout(r,0));
- const c=contexts[0];assert.ok(audio.wind);assert.equal(audio.wind.voice.loop,true);assert.equal(audio.nodes.size,0);
- const loop=audio.wind.voice;for(let i=0;i<50;i++)audio.update(.1,{season:'spring',time:'day'});
- assert.equal(c.voices.filter(v=>v.loop).length,1);assert.equal(await audio.cue('purr',{priority:true}),true);assert.equal(audio.nodes.size,1);assert.equal(audio.wind.voice,loop);
- assert.ok(audio.wind.gain.gain.value<catOutputGain(.4)*.15);
- audio.configure(false,.4);assert.equal(audio.wind,null);assert.equal(loop.stops,1);assert.equal(audio.nodes.size,0);
- audio.configure(true,.4);await audio.unlock();audio.update(.1,{season:'spring',time:'day'});await new Promise(r=>setTimeout(r,0));
- assert.ok(audio.wind);assert.notEqual(audio.wind.voice,loop);assert.equal(c.voices.filter(v=>v.loop&&v.stops===0).length,1);
- audio.stop();assert.equal(audio.wind,null);
-});
-
-test('wind sample loading cannot resurrect a muted or destroyed scene',async t=>{
- let resolve;const {audio,contexts}=fixture(t,id=>id==='wind'?new Promise(r=>{resolve=r}):Promise.resolve(null));
- await audio.unlock();audio.update(.1,{season:'summer',time:'day'});await new Promise(r=>setTimeout(r,0));assert.equal(typeof resolve,'function');
- audio.configure(false,.4);resolve({sampleRate:24000,data:new Float32Array(24000)});await new Promise(r=>setTimeout(r,0));
- assert.equal(contexts[0].voices.length,0);assert.equal(audio.wind,null);assert.equal(audio.windStarting,false);
- audio.configure(true,.4);await audio.unlock();audio.update(.1,{season:'summer',time:'day'});await new Promise(r=>setTimeout(r,0));audio.destroy();resolve(null);await new Promise(r=>setTimeout(r,0));
- assert.equal(contexts[0].voices.length,0);assert.equal(audio.wind,null);assert.equal(contexts[0].closed,true);
-});
-
 test('spontaneous meows are sparse and yield immediately to an explicit interaction',async t=>{
  const {audio,contexts,advance}=fixture(t);audio.random=()=>.5;await audio.unlock();const env={season:'summer',time:'day'};
  audio.update(.1,env);await new Promise(r=>setTimeout(r,0));assert.ok(audio.nextMeow>=70&&audio.nextMeow<=150);
@@ -194,17 +170,6 @@ test('spontaneous meows are sparse and yield immediately to an explicit interact
 });
 
 
-test('missing or invalid breeze recordings stay silent and do not retry every frame',async t=>{
- let reads=0;const {audio,contexts}=fixture(t,async id=>{if(id==='wind')reads++;return null});
- await audio.unlock();audio.update(.1,{season:'spring',time:'day'});await new Promise(r=>setTimeout(r,0));
- for(let i=0;i<100;i++)audio.update(.1,{season:'spring',time:'day'});
- assert.equal(reads,1);assert.equal(audio.wind,null);assert.equal(contexts[0].voices.length,0);
- assert.equal(await audio.cue('purr',{priority:true}),true,'missing wind never disables cat sounds');
- assert.ok(catWindGain(catOutputGain(.18),5)<.025);assert.ok(catWindGain(.7,5,{duck:true})<catWindGain(.7,5));assert.ok(catWindGain(.7,5,{night:true})<catWindGain(.7,5));
- const peakBound=prepareCatWindSample({sampleRate:24000,data:new Float32Array(24000).fill(.9)});assert.ok(Math.max(...peakBound.data)<=.231);
- assert.throws(()=>prepareCatWindSample({sampleRate:24000,data:new Float32Array(10)}),/Invalid/);
-});
-
 test('an interaction preempts an optional ambient file read without late playback',async t=>{
  let resolve;const {audio,contexts}=fixture(t,id=>id==='meow'?new Promise(r=>{resolve=r}):Promise.resolve(null));
  const ambient=audio.cue('meow',{ambient:true});await new Promise(r=>setTimeout(r,0));assert.equal(typeof resolve,'function');
@@ -212,16 +177,6 @@ test('an interaction preempts an optional ambient file read without late playbac
  resolve({sampleRate:24000,data:new Float32Array([0,.1,0])});assert.equal(await ambient,false);assert.equal(contexts[0].voices.length,1);assert.equal([...audio.nodes][0].kind,'purr');assert.equal(audio.queued,null);
 });
 
-
-test('bundled breeze decodes, stays quiet and remains seamless after loop preparation',()=>{
- const raw=readFileSync(new URL('../public/assets/cats/audio/wind-bed.wav',import.meta.url));
- const decoded=decodeCatSample(raw.buffer.slice(raw.byteOffset,raw.byteOffset+raw.byteLength),30);
- assert.equal(decoded.sampleRate,24000);assert.equal(decoded.data.length,672000);
- const loop=prepareCatWindSample(decoded);assert.equal(loop.data.length,662400);
- let power=0,peak=0,delta=0;for(let i=0;i<loop.data.length;i++){const v=loop.data[i];power+=v*v;peak=Math.max(peak,Math.abs(v));if(i)delta=Math.max(delta,Math.abs(v-loop.data[i-1]))}
- assert.ok(loop.data.filter(v=>Math.abs(v)<.0001).length/loop.data.length>.3,'natural gusts leave quiet intervals');assert.ok(peak<.12);assert.ok(Math.sqrt(power/loop.data.length)>.001&&Math.sqrt(power/loop.data.length)<.013);assert.ok(Math.abs(loop.data[0]-loop.data.at(-1))<=delta);
- assert.ok(peak*catWindGain(catOutputGain(.6),5)<.005,'maximum breeze level stays behind the foreground voices');
-});
 
 test('switching day/night cancels an in-flight bird but preserves meows and explicit interactions',async t=>{
  const resolvers={};const {audio,advance}=fixture(t,id=>['bird','meow','purr'].includes(id)?new Promise(r=>{resolvers[id]=r}):Promise.resolve(null));
@@ -235,4 +190,24 @@ test('switching day/night cancels an in-flight bird but preserves meows and expl
  const pet=audio.cue('purr',{priority:true});await new Promise(r=>setTimeout(r,0));
  audio.update(.1,{season:'winter',time:'night'});resolvers.purr({sampleRate:24000,data:new Float32Array([0,.1,0])});
  assert.equal(await pet,true);assert.equal([...audio.nodes][0].kind,'purr');
+});
+
+
+test('enabled courtyard audio never creates a music player or a continuous wind source',async t=>{
+ const requested=[];let musicPlayers=0;const OriginalAudio=globalThis.Audio;
+ globalThis.Audio=class{constructor(){musicPlayers++}};
+ t.after(()=>{if(OriginalAudio===undefined)delete globalThis.Audio;else globalThis.Audio=OriginalAudio});
+ const {audio,contexts,advance}=fixture(t,async id=>{requested.push(id);return null});audio.random=()=>.5;
+ audio.configure(true,.4,{music:true,musicVolume:1});await audio.unlock();
+ const ages=new Map();
+ for(let i=0;i<1800;i++){
+  advance(100);audio.update(.1,{season:'spring',time:'day',music:true,musicVolume:1});
+  await new Promise(r=>setImmediate(r));
+  for(const group of audio.nodes){const age=(ages.get(group.voice)||0)+.1;ages.set(group.voice,age);assert.equal(group.voice.loop,false);if(age>3)group.voice.finish();}
+ }
+ assert.equal(musicPlayers,0);assert.ok(requested.includes('bird'));assert.ok(requested.every(id=>['bird','meow'].includes(id)));
+ assert.ok(contexts[0].voices.length>=2&&contexts[0].voices.length<=7,'long silent gaps remain between occasional accents');
+ assert.equal(await audio.cue('scratch',{priority:true}),true);assert.ok(requested.includes('scratch'));
+ audio.configure(false,.4);assert.equal(audio.nodes.size,0);assert.equal(audio.queued,null);assert.equal(audio.queueTimer,0);
+ audio.destroy();assert.equal(contexts[0].closed,true);
 });

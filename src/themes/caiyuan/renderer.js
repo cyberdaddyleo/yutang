@@ -1,6 +1,6 @@
 import {LIFE_FILES,drawLanterns,drawAir,drawMist,drawToad,drawCoin,drawDelivery,drawBowlGlow,drawCoinPreview} from './life-renderer.js';
 import {ITEMS,ASSET_ROOT} from './catalog.js';
-import {sceneTransform,toWorld,toScreen,bounds,validPlacement,TABLE,incenseGeometry,lampAnchor} from './geometry.js';
+import {sceneTransform,toWorld,toScreen,bounds,validPlacement,TABLE,BURNER_MOUTH,incenseGeometry,lampAnchor} from './geometry.js';
 import {incenseState,timeOfDay} from './model.js';
 import {advanceMotion,drawCurtains,flamePose,windAt} from './atmosphere.js';
 import {drawIncenseSmoke} from './smoke.js';
@@ -31,9 +31,14 @@ export class CaiyuanRenderer{
   for(const entry of entries){if(entry.type==='toad'){drawToad(ctx,this.images,life,this.currentNight,reduced);continue}if(entry.type==='coin'){drawCoin(ctx,this.images,entry.coin,life.time);continue}const item=entry.item;if(item.kind==='bowl'&&life)drawDelivery(ctx,this.images,life,item);const b=bounds(item),x=b.x*1600,y=b.y*900,w=b.w*1600,h=b.h*900;
    ctx.save();ctx.translate(item.x*1600,item.y*900);ctx.scale(w*ITEMS[item.kind].base*.55,Math.max(2,w*.024));const g=ctx.createRadialGradient(0,0,0,0,0,1);g.addColorStop(0,'#26191065');g.addColorStop(1,'#26191000');ctx.fillStyle=g;ctx.fillRect(-1,-1,2,2);ctx.restore();
    ctx.save();ctx.filter=this.currentNight>.001?`brightness(${1-this.currentNight*.26})`:'none';
-   if(item.kind==='burner'){ctx.save();ctx.filter='none';this.drawIncense(ctx,item,now,clock,model,options);ctx.restore()}
    const img=this.images[ITEMS[item.kind].file];if(img){if(!immersive&&model.selectedId===item.id){ctx.shadowColor=this.drag?.id===item.id&&this.drag.invalid?'#f19b88':'#fff0b0';ctx.shadowBlur=7;}ctx.drawImage(img,x,y,w,h);ctx.shadowBlur=0}
-   if(item.kind==='burner'&&incenseState(item,now).status==='spent'){ctx.fillStyle='#bcb1a598';for(let i=0;i<12;i++){ctx.beginPath();ctx.ellipse(x+w*(.34+i*.026),y+h*(.143+Math.sin(i*7)*.01),w*.005,h*.008,0,0,7);ctx.fill()}}
+   if(item.kind==='burner'){
+    if(incenseState(item,now).status==='spent'){ctx.fillStyle='#bcb1a598';for(let i=0;i<12;i++){ctx.beginPath();ctx.ellipse(x+w*(.34+i*.026),y+h*(.113+Math.sin(i*7)*.01),w*.005,h*.008,0,0,7);ctx.fill()}}
+    // First the bowl's back wall and ash, then the stems, then only its front.
+    // Drawing the full opaque bowl over the sticks cuts them off at the back rim.
+    ctx.save();ctx.filter='none';this.drawIncense(ctx,item,now,clock,model,options);ctx.restore();
+    if(img)this.drawBurnerFront(ctx,img,b);
+   }
    if(item.kind==='plaque'){const wish=state.wishes.find(v=>v.id===item.wishId);if(wish){ctx.save();ctx.beginPath();ctx.rect(x+w*.2,y+h*.31,w*.61,h*.51);ctx.clip();ctx.fillStyle='#704223';ctx.font=`${Math.max(8,w*.145)}px "Songti SC","STSong",serif`;ctx.textAlign='center';const chars=[...wish.content];const short=chars.length>12?[...chars.slice(0,11),'…']:chars;for(let n=0;n<short.length;n++){const col=Math.floor(n/6),row=n%6;ctx.fillText(short[n],x+w*(short.length>6?.61-col*.23:.5),y+h*(.365+row*.072))}ctx.restore()}}
    ctx.restore();
    if(this.drag?.id===item.id){ctx.strokeStyle=this.drag.invalid?'#f19b88':'#eee5b1';ctx.lineWidth=1.4;ctx.beginPath();ctx.ellipse(item.x*1600,item.y*900,w*ITEMS[item.kind].base*.5,4,0,0,7);ctx.stroke()}
@@ -45,6 +50,14 @@ export class CaiyuanRenderer{
   if(!immersive&&!this.drag&&this.pointer&&model.tool?.startsWith('place:')){const kind=model.tool.slice(6);const i={kind,...this.pointer,scale:1};if(ITEMS[kind]){const b=bounds(i),img=this.images[ITEMS[kind].file];ctx.globalAlpha=.5;if(img)ctx.drawImage(img,b.x*1600,b.y*900,b.w*1600,b.h*900);ctx.globalAlpha=1;ctx.strokeStyle=validPlacement(i)?'#e4efb6':'#f1a798';ctx.lineWidth=1.5;ctx.beginPath();ctx.ellipse(i.x*1600,i.y*900,b.w*550,4,0,0,7);ctx.stroke()}}
   ctx.restore();
  }
+ drawBurnerFront(ctx,img,b){
+  const x=b.x*1600,y=b.y*900,w=b.w*1600,h=b.h*900,m=BURNER_MOUTH;
+  const cx=x+w*m.x,cy=y+h*m.y,rx=w*m.radiusX,ry=h*m.radiusY;
+  ctx.save();ctx.beginPath();ctx.moveTo(x,cy);ctx.lineTo(cx-rx,cy);
+  ctx.ellipse(cx,cy,rx,ry,0,Math.PI,0,true);
+  ctx.lineTo(x+w,cy);ctx.lineTo(x+w,y+h);ctx.lineTo(x,y+h);ctx.closePath();ctx.clip();
+  ctx.drawImage(img,x,y,w,h);ctx.restore();
+ }
  drawIncense(ctx,item,now,clock,model,options){
   const inc=incenseState(item,now),stick=this.images['incense_stick.webp'],smoke=this.images['incense_smoke.webp'];
   const trailing=model.effects.find(e=>e.type==='smokeEnd'&&e.id===item.id),tailAge=trailing?Math.max(0,now-trailing.at)/1000:0;
@@ -52,7 +65,7 @@ export class CaiyuanRenderer{
   const origins=incenseGeometry(item,inc.status==='burning'?inc.progress:trailing?.progress??inc.progress);
   for(const [j,s] of incenseGeometry(item,inc.progress).entries()){
    const x=s.x*1600,y=s.tipY*900,h=s.height*900,w=s.width*1600;
-   if(stick){const crop=stick.height*inc.progress*.78;ctx.drawImage(stick,0,crop,stick.width,stick.height-crop,x-w/2,y,w,h+5)}
+   if(stick){const crop=stick.height*inc.progress*.78;ctx.drawImage(stick,0,crop,stick.width,stick.height-crop,x-w/2,y,w,h)}
    if(inc.status==='burning'){
     const glow=ctx.createRadialGradient(x,y,0,x,y,3*item.scale);glow.addColorStop(0,'#ffad6880');glow.addColorStop(1,'#e66d3900');ctx.fillStyle=glow;ctx.fillRect(x-3*item.scale,y-3*item.scale,6*item.scale,6*item.scale);
     ctx.fillStyle='#ed8d57';ctx.beginPath();ctx.ellipse(x,y+1,1.25*item.scale,.85*item.scale,0,0,7);ctx.fill();

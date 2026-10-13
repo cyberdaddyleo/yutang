@@ -91,7 +91,10 @@ export function hitFacility(point){
 function transitionAllowed(a,b){
   const x=surfaceIdAt(a),y=surfaceIdAt(b);if(x===y)return true;
   const pair=[x,y].sort().join(':');
-  if(['ground:step','porch:step','bed:porch','bed-entry:porch','bed:bed-entry','ground:rock-step','rock-step:safe-rock'].includes(pair))return true;
+  // The raised woven rim is crossed at its clear front, not through either
+  // side wall. All routes (including exit and wandering) obey this entrance.
+  if(x==='bed'||y==='bed'){const edge=x==='bed'?a:b;return ['bed:porch','bed:bed-entry'].includes(pair)&&edge.x>=.714&&edge.x<=.771&&edge.y>=.142;}
+  if(['ground:step','porch:step','bed-entry:porch','ground:rock-step','rock-step:safe-rock'].includes(pair))return true;
   // The flat rock is reached from its low right edge, never through its face.
   if(pair==='ground:safe-rock'){const p=x==='safe-rock'?a:b;return p.x>.285&&p.y>.825&&p.y<.89;}
   return false;
@@ -138,6 +141,15 @@ for(const p of nodes)if(p){const x=p.key%GRID_X,y=Math.floor(p.key/GRID_X);for(l
   const q=nodes[ny*GRID_X+nx];if(q&&segmentWalkable(p,q))p.neighbors.push(q.key);
 }}
 const safeNodes=nodes.filter(Boolean);
+// The narrow walkable strip in front of the mat falls between regular grid
+// rows. Explicit connectors keep a sleeping neighbour from making a visibly
+// open wooden walkway appear unreachable; they do not expand its geometry.
+const porchGuides=[];
+for(const [x,y]of [[.671875,.205],[.6875,.205],[.703125,.205],[.71875,.205],[.734375,.205],[.75,.205],[.765625,.211],[.78125,.22]]){
+ const point={x,y,key:nodes.length,neighbors:[]};if(!isWalkable(point))continue;
+ for(const node of nodes)if(node&&distance(point,node)<.037&&segmentWalkable(point,node)){point.neighbors.push(node.key);node.neighbors.push(point.key)}
+ nodes.push(point);porchGuides.push(point);
+}
 export function nearestWalkable(point,maxDistance=Infinity){
   if(isWalkable(point))return {x:point.x,y:point.y};
   let best=null,bestD=maxDistance;
@@ -167,9 +179,30 @@ function nearestConnected(point,avoid=[]){
     }
     if(best)return best;
   }
-  return null;
+  return porchGuides.filter(node=>distance(point,node)<.07&&avoidsCats(point,node,avoid)&&segmentWalkable(point,node)).sort((a,b)=>distance(point,a)-distance(point,b))[0]||null;
 }
-export function findPath(from,to,{avoid=[]}={}){
+// Approach the front lip squarely. Separate lanes let a cat use the free half
+// of the mat when its neighbour is asleep; a blocked lane is never forced.
+export const BED_PORTALS=Object.freeze([[.721,.710],[.739,.739],[.757,.766]].map(([outsideX,insideX])=>Object.freeze({
+ outside:Object.freeze({x:outsideX,y:.194}),inside:Object.freeze({x:insideX,y:.124}),
+})));
+export function findPath(from,to,{avoid=[],bedAvoid=[]}={}){
+ const fromBed=surfaceIdAt(from)==='bed',toBed=surfaceIdAt(to)==='bed';
+ if(fromBed===toBed)return findNavPath(from,to,{avoid});
+ const occupied=[...avoid,...bedAvoid];
+ let best=null,cost=Infinity;
+ for(const portal of BED_PORTALS){
+  const takeoff=fromBed?portal.inside:portal.outside,landing=fromBed?portal.outside:portal.inside;
+  if(!segmentWalkable(takeoff,landing)||!avoidsCats(takeoff,landing,occupied))continue;
+  const approach=findNavPath(from,takeoff,{avoid:fromBed?occupied:avoid}),departure=findNavPath(landing,to,{avoid:toBed?occupied:avoid});
+  if(!approach||!departure)continue;
+  const candidate=[...approach.slice(0,-1),{...takeoff,bedJump:{to:{...landing},direction:fromBed?'down':'up'}},...departure];
+  let length=0,previous=from;for(const node of candidate){length+=distance(previous,node);previous=node;if(node.bedJump){length+=distance(node,node.bedJump.to);previous=node.bedJump.to;}}
+  if(length<cost){cost=length;best=candidate;}
+ }
+ return best;
+}
+function findNavPath(from,to,{avoid=[]}={}){
   if(!isWalkable(from)||!isWalkable(to)||avoid.some(o=>distance(to,o)<(o.radius||.046)))return null;
   if(avoidsCats(from,to,avoid)&&segmentWalkable(from,to))return [{x:to.x,y:to.y}];
   const start=nearestConnected(from,avoid),end=nearestConnected(to,avoid);if(!start||!end)return null;

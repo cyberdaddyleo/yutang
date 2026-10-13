@@ -1,0 +1,16 @@
+Courtyard Cat / Pilot Cat — model attribution
+
+Base cat mesh: "Rigged and animated Cat" by JonasDichelle.
+Original work: https://blendswap.com/blend/18519
+Licensed under Creative Commons Attribution 3.0 Unported (CC BY 3.0).
+License: https://creativecommons.org/licenses/by/3.0/
+
+FBX conversion by Antti Nuortimo, distributed with Ylikuutio:
+https://github.com/nrz/ylikuutio
+https://raw.githubusercontent.com/nrz/ylikuutio/master/res/objects/www.blendswap.com/86110_rigged_and_animated_cat/cat.fbx
+
+Modifications for this project: normalized scale and ground placement; newly authored quadruped skeleton and heat skin weights; four-foot IK controls; baked Idle, Walk, Rest, Sleep, Eat, Drink, Groom, Scratch, Play, Pet, HopUp and HopDown actions; head-bound eye and nose geometry; breed morphology and eyelid morph targets; sixteen procedural coats and skinned fur tufts. Original continuous body mesh retained. The public source FBX contained no armature, animations or painted coat textures. All coats and rig/action changes above are authored for this project; the supplied original portraits remain separate reference art.
+
+courtyard-cat.glb is the production asset. pilot-cat.glb is the earlier technical review asset, retained for provenance and rollback. No Blendkit model or restricted Blendkit texture is included in either asset.
+
+This attribution does not imply endorsement by the original author or converter.

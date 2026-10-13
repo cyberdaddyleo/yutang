@@ -1,0 +1,177 @@
+{
+  "schemaVersion": 1,
+  "asset": "courtyard-cat.glb",
+  "status": "courtyard-full-3d-actions",
+  "modelLength": 0.7,
+  "cameraElevationDegrees": 55,
+  "scale": 1,
+  "groundOffset": 0,
+  "walkStride": 0.24,
+  "walkDuration": 1.2,
+  "stanceFraction": 0.64,
+  "forwardAxis": "+Z",
+  "upAxis": "+Y",
+  "rootMotionNodes": [],
+  "jumpSections": {
+    "crouch": 0.24,
+    "jump": 0.78
+  },
+  "mouthBone": "Head",
+  "mouthOffset": [
+    -3.2997771182152746e-09,
+    0.13484087586402893,
+    -0.00511256605386734
+  ],
+  "mouthMorphOffsets": {
+    "MuzzleShort": [
+      4.17638856831104e-09,
+      -0.03210119158029556,
+      0.0069642262533307076
+    ]
+  },
+  "footBones": {
+    "frontLeft": "FrontLPaw",
+    "frontRight": "FrontRPaw",
+    "hindLeft": "HindLPaw",
+    "hindRight": "HindRPaw"
+  },
+  "clips": {
+    "Idle": {
+      "duration": 4.0,
+      "frames": 121,
+      "fps": 30,
+      "action": "Idle",
+      "loop": true
+    },
+    "Walk": {
+      "duration": 1.2,
+      "frames": 37,
+      "fps": 30,
+      "action": "Walk",
+      "loop": true
+    },
+    "Rest": {
+      "duration": 4.0,
+      "frames": 121,
+      "fps": 30,
+      "action": "Rest",
+      "loop": true
+    },
+    "Sleep": {
+      "duration": 4.8,
+      "frames": 145,
+      "fps": 30,
+      "action": "Sleep",
+      "loop": true
+    },
+    "RestPlush": {
+      "duration": 4.0,
+      "frames": 121,
+      "fps": 30,
+      "action": "RestPlush",
+      "loop": true
+    },
+    "SleepPlush": {
+      "duration": 4.8,
+      "frames": 145,
+      "fps": 30,
+      "action": "SleepPlush",
+      "loop": true
+    },
+    "Eat": {
+      "duration": 2.4,
+      "frames": 73,
+      "fps": 30,
+      "action": "Eat",
+      "loop": true
+    },
+    "Drink": {
+      "duration": 2.0,
+      "frames": 61,
+      "fps": 30,
+      "action": "Drink",
+      "loop": true
+    },
+    "Groom": {
+      "duration": 3.2,
+      "frames": 97,
+      "fps": 30,
+      "action": "Groom",
+      "loop": true
+    },
+    "Scratch": {
+      "duration": 2.0,
+      "frames": 61,
+      "fps": 30,
+      "action": "Scratch",
+      "loop": true
+    },
+    "Play": {
+      "duration": 2.4,
+      "frames": 73,
+      "fps": 30,
+      "action": "Play",
+      "loop": true
+    },
+    "Pet": {
+      "duration": 3.0,
+      "frames": 91,
+      "fps": 30,
+      "action": "Pet",
+      "loop": true
+    },
+    "HopUp": {
+      "duration": 0.9,
+      "frames": 28,
+      "fps": 30,
+      "action": "HopUp",
+      "loop": false
+    },
+    "HopDown": {
+      "duration": 0.9,
+      "frames": 28,
+      "fps": 30,
+      "action": "HopDown",
+      "loop": false
+    }
+  },
+  "deformBoneCount": 28,
+  "vertexCount": 22650,
+  "source": {
+    "author": "JonasDichelle",
+    "conversionBy": "Antti Nuortimo",
+    "url": "https://blendswap.com/blend/18519",
+    "download": "https://raw.githubusercontent.com/nrz/ylikuutio/master/res/objects/www.blendswap.com/86110_rigged_and_animated_cat/cat.fbx",
+    "license": "CC-BY-3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0/"
+  },
+  "changes": "Original continuous body retained and restyled. Newly authored quadruped armature, heat skinning, IK controls and distinct baked in-place locomotion, recumbent sleep/rest, feeding, drinking, grooming, scratching, play, pet feedback and jump clips. No original animation was in the public FBX.",
+  "notes": [
+    "World displacement and jump arc must be applied by the game, not the clips.",
+    "Control actions and muted IK constraints remain in the .blend for editing; GLB contains baked deformation joints.",
+    "Sleep, Eat and other actions are newly authored bone motion, not inferred video mocap."
+  ],
+  "appearanceMaterials": {
+    "fur": [
+      "Fur"
+    ],
+    "eyes": [
+      "Iris"
+    ],
+    "nose": [
+      "Nose"
+    ]
+  },
+  "morphNames": [
+    "Build",
+    "Fluff",
+    "Cheeks",
+    "MuzzleShort",
+    "EarsLarge",
+    "EarsRound",
+    "EyeSize",
+    "CloseEyes"
+  ],
+  "art": "16 authored procedural coats, additive continuous-body breed morphs; original portraits remain the art reference",
+  "coatCoordinates": "glTF rest position: X lateral, Y up, Z forward; length .7m"
+}

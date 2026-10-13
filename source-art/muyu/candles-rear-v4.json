@@ -1,0 +1,74 @@
+{
+  "sourceGeneratedFile": "source-art/muyu/candles-rear-v4.png",
+  "sourceFile": "candles-rear-v4.png",
+  "referenceFile": "user-provided visual reference (local-only)",
+  "generation": "Built-in image_gen",
+  "sourceSize": [
+    1536,
+    1024
+  ],
+  "visibleBoundsAlphaAbove8": [
+    189,
+    96,
+    1359,
+    933
+  ],
+  "cropBounds": [
+    181,
+    88,
+    1367,
+    941
+  ],
+  "runtimeFile": "candles-rear-v4.webp",
+  "runtimeSize": [
+    1024,
+    736
+  ],
+  "hasAlpha": true,
+  "wickTipsNormalized": [
+    [
+      0.20995,
+      0.24971
+    ],
+    [
+      0.49494,
+      0.01524
+    ],
+    [
+      0.80354,
+      0.45135
+    ]
+  ],
+  "waxTopCentersNormalized": [
+    [
+      0.20489,
+      0.3095
+    ],
+    [
+      0.49663,
+      0.08792
+    ],
+    [
+      0.80776,
+      0.51348
+    ]
+  ],
+  "feetNormalized": [
+    [
+      0.20742,
+      0.96835
+    ],
+    [
+      0.49494,
+      0.92263
+    ],
+    [
+      0.80354,
+      0.98242
+    ]
+  ],
+  "notes": "Three unlit candles in brass cups, wickTips are procedural flame roots, normalized against cropped runtime texture. Preserve image aspect ratio. Mother original alpha and edges preserved. Exterior RGB has dark amber matte RGB but alpha zero; use RGBA. Only crop/resize/WEBP encoding performed. Ideal as softly defocused rear room dressing at max120x86scene.",
+  "prompts": [
+    "Use case: stylized-concept. Asset: transparent layered 2.5D game prop. Input image 1 is only STYLE/reference, specifically the three short candles sitting on the back-right table underneath the lantern. Create only one compact set of THREE ivory wax pillar candles in separate short aged-brass holders, arranged with staggered heights: medium on left, tall center slightly behind, short right. Their round brass bases nearly touch, so this is a cohesive group rather than a sparse spread. Complete set width 1.5 times total height.\nClassic Chinese quiet room, high-quality physically realistic cinematic rendered materials, ivory cream wax with a few natural wax drips, warm aged brass short cup-shaped trays and small low flared round feet, restrained simplicity. Slightly elevated frontal camera consistent with reference, each wick visible and each candle top an ellipse. No long candlestick poles, no candelabra arms, no filigree.\nALL CANDLES COMPLETELY UNLIT: short black wick at each wax center, no ember, no fire, no emission, no bloom, no orange glow. Warm neutral EXTERNAL illumination only, subtle material highlights. Keep outlines and shape readable at 120x80 game units.\nTransparent background alpha, no backdrop, no tabletop, no ground plane, no shadow around or underneath, no reflections outside the objects, no lettering, no watermarks, no extra candles or lanterns. Object only, full objects uncut with a little transparent margin, ready for game engine to add separate animated flames."
+  ]
+}

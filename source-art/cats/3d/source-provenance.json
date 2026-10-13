@@ -1,0 +1,15 @@
+{
+  "id": "jonas-dichelle",
+  "title": "Rigged and animated Cat — mesh-only FBX conversion",
+  "author": "JonasDichelle (original); Antti Nuortimo (FBX conversion)",
+  "license": "CC-BY-3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+  "authorPage": "https://blendswap.com/blend/18519",
+  "source": "https://github.com/nrz/ylikuutio",
+  "download": "https://raw.githubusercontent.com/nrz/ylikuutio/master/res/objects/www.blendswap.com/86110_rigged_and_animated_cat/cat.fbx",
+  "file": "cat.fbx",
+  "inspection": "22650 vertices; one continuous natural quadruped cat mesh; no armature, no actions, no texture images in the public FBX. Includes three material slots. Original complete Blender file on BlendSwap requires sign-in. Candidate suitable as a rigging base, not finished product art.",
+  "credit": "Cat base mesh adapted from Rigged and animated Cat by JonasDichelle, CC BY 3.0, https://blendswap.com/blend/18519. FBX conversion by Antti Nuortimo (Ylikuutio). Changes: new quadruped rig, skinning, 12 baked actions, face geometry, breed morphs, 16 procedural coats and skinned fur tufts. See public/assets/cats/3d/ATTRIBUTION.txt.",
+  "sha256": "4e156a3b81638d07a78278889d2184c9a106fd81c2de84bd212c1bd12ea03428",
+  "bytes": 1373356
+}

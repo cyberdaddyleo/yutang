@@ -1,0 +1,64 @@
+{
+  "asset": "walnut-warm-v4",
+  "purpose": "Localized warm lantern reflection variant for classic walnut at night; keep neutral walnut.webp for day and lights off.",
+  "generatedWith": "Built-in image_gen",
+  "generatedSource": "source-art/muyu/walnut-warm-v4.png",
+  "sourceFile": "walnut-warm-v4.png",
+  "sourceSize": [
+    1460,
+    1078
+  ],
+  "sourceAlphaBoundsAt8": [
+    5,
+    0,
+    1451,
+    1068
+  ],
+  "crop": {
+    "left": 3,
+    "top": 0,
+    "width": 1451,
+    "height": 1071
+  },
+  "runtimeFile": "public/assets/muyu/walnut-warm-v4.webp",
+  "runtimeSize": [
+    1024,
+    756
+  ],
+  "alpha": true,
+  "resize": "Uniform contain, never anisotropic stretch. Crop leaves soft antialiasing around the alpha>8 bounds.",
+  "anchors": {
+    "foot": [
+      512,
+      754
+    ],
+    "scene": {
+      "wood": {
+        "x": 575,
+        "y": 255,
+        "w": 480,
+        "h": 354,
+        "anchorX": 815,
+        "anchorY": 609
+      },
+      "impact": {
+        "x": 986,
+        "y": 350
+      }
+    }
+  },
+  "referenceFiles": [
+    "public/assets/muyu/walnut.webp",
+    "user-provided visual reference (local-only)"
+  ],
+  "prompt": "Use case: lighting-weather. Asset type: transparent 2D game prop sprite, nocturnal warm light variant. Image 1 is the strict edit target. Image 2 is ONLY a material and lighting reference. EDIT ONLY the material lighting of the exact wooden fish in image 1. Preserve its exact outer silhouette, camera perspective, proportions, footprint, centered framing, mouth groove shape and every carved cloud motif. Preserve the existing 1024:756 subject aspect ratio. No shape redesign, no added engraving. The object must be exactly recognizable as the same wooden fish so it can crossfade over the original without a jump. Restore the cinematic material of the wooden fish in Image 2: deep oily walnut with legible flowing grain, rich amber highlights across upper dome, concentrated warm gold lantern reflection grazing the top and upper-left shoulder, gently illuminated carved face, warm brown front and darker brown lower-right volume. Lighting has beautiful localized contrast and deep groove shadows, rather than evenly lit studio white highlights. Smooth polished aged hardwood, not black charred wood. Golden rim is physical reflection on wood, not emitted glow or magical outline. Do not yellow-tint the whole image. Keep grain natural and intricate but not oversharpened. Transparent background with clean semitransparent antialiasing. Nothing except the single wooden fish: no cushion, mallet, table, lantern, beads, smoke, shadow plane, scenery, UI, text, border or checkerboard. Output a high quality genuinely transparent PNG.",
+  "validation": {
+    "runtimeDimensions": [
+      1024,
+      756
+    ],
+    "alphaSilhouetteIoUAgainstNeutralAt128": 0.9918207621069337,
+    "visualReview": "Same silhouette, mouth, cloud carvings and perspective; localized warm lantern highlights with dark walnut lower volume; no backdrop/cushion/mallet.",
+    "oldNeutralPreserved": true
+  }
+}

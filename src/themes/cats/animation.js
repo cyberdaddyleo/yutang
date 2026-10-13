@@ -8,6 +8,13 @@ export const CAT_ACTION_CLIPS=Object.freeze({walkToward:[0,1,2,3],walkAway:[4,5,
 const TAU=Math.PI*2,clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
 const smooth=v=>{const t=clamp(v,0,1);return t*t*(3-2*t)};
 export const GAIT_STRIDE_RATIO=.22;
+const ORIGINAL_STYLE_ACTIONS=new Set(['rest','sleep','eat','groom','scratch']);
+// Keep the supplied portrait intact during locomotion. The experimental gait
+// cuts and warps its paws, and generated rear poses change the original design.
+// Retain painted stationary actions so sleeping/eating remain visibly distinct.
+export function originalStyleAtlas(sample,atlas){
+  return ORIGINAL_STYLE_ACTIONS.has(sample.action)&&ORIGINAL_STYLE_ACTIONS.has(sample.renderAction??sample.action)&&(sample.renderIndex??sample.index)>=8?atlas:null;
+}
 const baseAtlases=new Map(),paintedAtlases=new Map();
 const PART_ORDER=['head','tail','frontLeft','frontRight','backLeft','backRight','legs','body'];
 
@@ -21,7 +28,7 @@ export function selectCatAction(cat){
   if(cat.state==='sleep')return 'sleep';
   if(cat.state==='rest')return 'rest';
   if(cat.state==='groom')return 'groom';
-  if(cat.state==='eat'||cat.task?.tool==='food'&&cat.state==='observe'&&cat.task.phase==='interact')return 'eat';
+  if(cat.state==='drink'||cat.state==='eat'||cat.task?.tool==='food'&&cat.state==='observe'&&cat.task.phase==='interact')return 'eat';
   if(cat.task?.tool==='scratch'&&cat.state==='interact')return 'scratch';
   if(cat.task?.tool==='pet'&&cat.state==='interact')return 'rest';
   if(['yarn','mouse','wand'].includes(cat.task?.tool)&&['interact','observe'].includes(cat.state))return 'pounce';
@@ -43,7 +50,7 @@ export function animationSample(cat,preset,time,lowMotion=false){
   const jump=0; // Whole-body lift belongs exclusively to a real surface traversal.
   const length=Math.hypot(cat.motionDx||0,(cat.motionDy||0)*9/16),heading=cat.heading||0;
   const locomotion={origin:{x:cat.x||0,y:(cat.y||0)*9/16},direction:length>1e-9?{x:cat.motionDx/length,y:cat.motionDy*9/16/length}:{x:Math.cos(heading),y:Math.sin(heading)},distance:cat.strideDistance||0,stride:Math.max(.015,(preset.scale||.068)*normalizeCustomization(cat.customization).size*GAIT_STRIDE_RATIO),moving:walking};
-  return {action,index,next:index,mix:0,bob:0,lean:0,jump,locomotion,gaitPhase:phase,strideStrength,singlePose:true,motionStage:leaping(cat)?cat.traverse.phase:null,stageProgress:leaping(cat)?cat.traverse.progress||0:0,traverse:leaping(cat)?{kind:cat.traverse.kind,style:cat.traverse.style||(cat.traverse.kind==='climb'?'climb':'jump'),direction:cat.traverse.direction||'up'}:null,actionTime:cat.stateTime??time};
+  return {action,index,next:index,mix:0,bob:0,lean:0,jump,locomotion,gaitPhase:phase,strideStrength,singlePose:true,motionStage:leaping(cat)?cat.traverse.phase:null,stageProgress:leaping(cat)?cat.traverse.progress||0:0,traverse:leaping(cat)?{kind:cat.traverse.kind,feature:cat.traverse.feature,style:cat.traverse.style||(cat.traverse.kind==='climb'?'climb':'jump'),direction:cat.traverse.direction||'up'}:null,actionTime:cat.stateTime??time};
 }
 
 export function partUV(point,sourceRect,targetRect){
@@ -256,7 +263,7 @@ export class CatAnimationState {
       if((state.action==='walkToward'&&sy>-.42)||(state.action==='walkAway'&&sy<.25))current={...current,action:state.action,index:state.action==='walkAway'?4:0,next:state.action==='walkAway'?4:0};
       if(Math.abs(sx)<.30)flip=state.flip;
     }
-    if(current.action==='idle'){const orient=cat.task?.tool==='food'&&cat.task.phase==='orient';current={...current,index:orient?0:state.bank,next:orient?0:state.bank};if(!orient)flip=state.flip}
+    if(current.action==='idle'){const orient=['food','water'].includes(cat.task?.tool)&&cat.task.phase==='orient';current={...current,index:orient?0:state.bank,next:orient?0:state.bank};if(!orient)flip=state.flip}
     if(turning&&(state.action!==current.action||state.flip!==flip)){
       const candidate=`${current.action}:${flip}`;
       if(state.candidate!==candidate){state.candidate=candidate;state.candidateAt=time}
